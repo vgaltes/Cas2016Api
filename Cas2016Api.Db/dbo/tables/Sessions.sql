@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Sessions]
+(
+	[Id] INT IDENTITY (-1, -1) NOT FOR REPLICATION NOT NULL,
+	[Title] NVARCHAR(512) NOT NULL,
+	[Description] NVARCHAR(MAX) NOT NULL
+)

@@ -10,9 +10,9 @@ namespace Cas2016.Api
             var configuration = new HttpConfiguration();
 
             configuration.Routes.MapHttpRoute("Default", "", new {controller = "default"});
+            configuration.Routes.MapHttpRoute("Sessions", "sessions", new {controller = "sessions"});
 
             app.UseWebApi(configuration);
-
         }
     }
 }

@@ -1,0 +1,5 @@
+﻿INSERT INTO SESSIONS (Title, Description) VALUES ('Test Session 1', 'Test session 1 description')
+INSERT INTO SESSIONS (Title, Description) VALUES ('Test Session 2', 'Test session 2 description')
+INSERT INTO SESSIONS (Title, Description) VALUES ('Test Session 3', 'Test session 3 description')
+INSERT INTO SESSIONS (Title, Description) VALUES ('Test Session 4', 'Test session 4 description')
+INSERT INTO SESSIONS (Title, Description) VALUES ('Test Session 5', 'Test session 5 description')
