@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Cas2016.Api.Configuration;
 using Cas2016.Api.Repositories;
 
@@ -16,9 +17,16 @@ namespace Cas2016.Api.Controllers
 
         public IHttpActionResult Get()
         {
-            var sessions = _sessionsRepository.GetAll();
+            try
+            {
+                var sessions = _sessionsRepository.GetAll();
 
-            return Ok(sessions);
+                return Ok(sessions);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }
