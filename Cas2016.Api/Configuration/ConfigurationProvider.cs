@@ -6,6 +6,13 @@ namespace Cas2016.Api.Configuration
     {
         private const string ConnectionStringKey = "Cas2016Api.Db";
 
-        public string DbConnectionString => ConfigurationManager.ConnectionStrings[ConnectionStringKey].ConnectionString;
+        public string DbConnectionString
+        {
+            get
+            {
+                var connectionString = ConfigurationManager.ConnectionStrings[ConnectionStringKey].ConnectionString;
+                return connectionString;
+            }
+        }
     }
 }
