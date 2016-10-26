@@ -3,10 +3,10 @@ using NUnit.Framework;
 
 namespace Cas2016.Api.Tests
 {
-    [SetUpFixture]
+    //[SetUpFixture]
     public class TestAssemblySetup
     {
-        [OneTimeSetUp]
+        //[OneTimeSetUp]
         public void RunBeforeAnyTestsInThisAssembly()
         {
             var dbInitialiser = new DatabaseInitialiser();

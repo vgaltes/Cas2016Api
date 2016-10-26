@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Cas2016.Api.Models;
@@ -26,7 +27,6 @@ namespace Cas2016.Api.Tests
         public async Task CallToSessionsShouldReturnTheSessions()
         {
             const int numberOfSessions = 5;
-            InitializeDatabaseWithSessions(numberOfSessions);
 
             using (var server = TestServer.Create<Startup>())
             {
@@ -39,10 +39,44 @@ namespace Cas2016.Api.Tests
             }
         }
 
-        private void InitializeDatabaseWithSessions(int numberOfSessions)
+        [Test]
+        public async Task CallToSessionShouldReturnTheSession()
         {
-            
+            const int sessionId = 1;
 
+            using (var server = TestServer.Create<Startup>())
+            {
+                var response = await server.HttpClient.GetAsync($"/Sessions/{sessionId}");
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+                var content = await response.Content.ReadAsAsync<SessionModel>();
+
+                content.Id.Should().Be(sessionId);
+            }
+        }
+
+        [SetUp]
+        public void RunBeforeAnyTestsInThisAssembly()
+        {
+            var dbInitialiser = new DatabaseInitialiser();
+
+            // ReSharper disable once ConvertToConstant.Local
+            var shouldDropAndCreateDatabase = true;
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (!shouldDropAndCreateDatabase)
+                return;
+
+            dbInitialiser.Publish(true);
+
+            var scriptsBasePath = AppDomain.CurrentDomain.BaseDirectory + @"\Scripts\";
+
+            var scriptFilePaths = new[]
+            {
+                scriptsBasePath + "InsertSessions.sql"
+            };
+
+            dbInitialiser.Seed(scriptFilePaths);
         }
     }
 }

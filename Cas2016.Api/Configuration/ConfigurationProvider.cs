@@ -2,11 +2,11 @@
 
 namespace Cas2016.Api.Configuration
 {
-    public class ConfigurationProvider
+    public static class ConfigurationProvider
     {
         private const string ConnectionStringKey = "Cas2016Api.Db";
 
-        public string DbConnectionString
+        public static string DbConnectionString
         {
             get
             {
