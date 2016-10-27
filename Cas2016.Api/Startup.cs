@@ -14,6 +14,7 @@ namespace Cas2016.Api
         {
             configuration.Routes.MapHttpRoute("Default", "", new { controller = "default" });
             configuration.Routes.MapHttpRoute("Sessions", "sessions/{sessionId}", new { controller = "sessions", sessionId = RouteParameter.Optional });
+            configuration.Routes.MapHttpRoute("Speakers", "speakers/{speakerId}", new {controller = "speakers", speakerId = RouteParameter.Optional });
         }
 
         public void Configuration(IAppBuilder app)
@@ -21,6 +22,8 @@ namespace Cas2016.Api
             var configuration = new HttpConfiguration();
 
             AddRoutes(configuration);
+            configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
+
 
             ConfigureAutoFac(app, configuration);
 
@@ -38,6 +41,11 @@ namespace Cas2016.Api
                 .Register(c => new SessionRepository(ConfigurationProvider.DbConnectionString))
                 .As<ISessionRepository>()
                 .InstancePerRequest();
+            builder
+                .Register(c => new SpeakerRepository(ConfigurationProvider.DbConnectionString))
+                .As<ISpeakerRepository>()
+                .InstancePerRequest();
+
             var container = builder.Build();
             configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 

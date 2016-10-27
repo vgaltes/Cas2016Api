@@ -1,0 +1,3 @@
+﻿INSERT INTO SPEAKERS (FirstName, LastName, TwitterProfile, LinkedinProfile, Website, Biography, Image, City, Country) VALUES ('Vicenc', 'Garcia', 'http://twitter.com/vgaltes', null, 'http://vgaltes.com', 'Developer', 'https://pbs.twimg.com/profile_images/705442688615784448/YJNUEanw.jpg', 'London', 'UK')
+INSERT INTO SPEAKERS (FirstName, LastName, TwitterProfile, LinkedinProfile, Website, Biography, Image, City, Country) VALUES ('Jorge', 'Uriarte', 'http://twitter.com/jorgeuriarte', null, null, 'De Bilbao', 'https://pbs.twimg.com/profile_images/465627689316278273/IwNqQH3D.png', 'Bilbao', 'Pais Vasco')
+	

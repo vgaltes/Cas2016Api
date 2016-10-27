@@ -55,8 +55,40 @@ namespace Cas2016.Api.Tests
             }
         }
 
+        [Test]
+        public async Task CallToSpeakersShouldReturnTheSpeakers()
+        {
+            const int numberOfSpeakers = 2;
+
+            using (var server = TestServer.Create<Startup>())
+            {
+                var response = await server.HttpClient.GetAsync("/Speakers");
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+                var content = await response.Content.ReadAsAsync<IList<SpeakerModel>>();
+
+                content.Should().HaveCount(numberOfSpeakers);
+            }
+        }
+
+        [Test]
+        public async Task CallToSpeakerShouldReturnTheSpeaker()
+        {
+            const int speakerId = 1;
+
+            using (var server = TestServer.Create<Startup>())
+            {
+                var response = await server.HttpClient.GetAsync($"/Speakers/{speakerId}");
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+                var content = await response.Content.ReadAsAsync<SpeakerModel>();
+
+                content.Id.Should().Be(speakerId);
+            }
+        }
+
         [SetUp]
-        public void RunBeforeAnyTestsInThisAssembly()
+        public void SetUp()
         {
             var dbInitialiser = new DatabaseInitialiser();
 
@@ -73,7 +105,8 @@ namespace Cas2016.Api.Tests
 
             var scriptFilePaths = new[]
             {
-                scriptsBasePath + "InsertSessions.sql"
+                scriptsBasePath + "InsertSessions.sql",
+                scriptsBasePath + "InsertSpeakers.sql"
             };
 
             dbInitialiser.Seed(scriptFilePaths);

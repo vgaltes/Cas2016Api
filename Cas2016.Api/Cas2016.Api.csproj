@@ -143,14 +143,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationProvider.cs" />
-    <Compile Include="Configuration\WebApiConfig.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
+    <Compile Include="Controllers\SpeakersController.cs" />
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\ModelFactory.cs" />
     <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Models\SpeakerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ISpeakerRepository.cs" />
     <Compile Include="Repositories\ISessionRepository.cs" />
+    <Compile Include="Repositories\SpeakerRepository.cs" />
     <Compile Include="Repositories\SessionRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
