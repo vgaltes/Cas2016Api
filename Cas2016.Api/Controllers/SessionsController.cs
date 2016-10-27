@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Cas2016.Api.Models;
 using Cas2016.Api.Repositories;
@@ -18,17 +19,26 @@ namespace Cas2016.Api.Controllers
         {
             var sessions = _sessionsRepository.GetAll();
 
-            return Ok(sessions);
+            var sessionsWithSelfLinks = sessions.Select(AddSelfLinkTo);
+
+            return Ok(sessionsWithSelfLinks);
         }
 
         public IHttpActionResult Get(int sessionId)
         {
             var session = _sessionsRepository.Get(sessionId);
 
-            var selfLink = ModelFactory.CreateLink(Url, "self", "Sessions", new {sessionId = sessionId});
+            var sessionWithSelfLink = AddSelfLinkTo(session);
+
+            return Ok(sessionWithSelfLink);
+        }
+
+        private SessionModel AddSelfLinkTo(SessionModel session)
+        {
+            var selfLink = ModelFactory.CreateLink(Url, "self", "Sessions", new {sessionId = session.Id});
             session.Links = new List<LinkModel> {selfLink};
 
-            return Ok(session);
+            return session;
         }
     }
 }

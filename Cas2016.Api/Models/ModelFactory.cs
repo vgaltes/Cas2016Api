@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Web.Http.Routing;
+﻿using System.Web.Http.Routing;
 
 namespace Cas2016.Api.Models
 {

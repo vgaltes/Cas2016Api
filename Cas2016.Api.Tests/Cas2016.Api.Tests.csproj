@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiTests.cs" />
+    <Compile Include="Builders\SessionsControllerBuilder.cs" />
     <Compile Include="DatabaseConfigurationProvider.cs" />
     <Compile Include="DatabaseInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
