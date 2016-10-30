@@ -13,7 +13,7 @@ namespace Cas2016.Api
         public static void AddRoutes(HttpConfiguration configuration)
         {
             configuration.Routes.MapHttpRoute("Default", "", new { controller = "default" });
-            configuration.Routes.MapHttpRoute("Sessions", "sessions/{sessionId}", new { controller = "sessions", sessionId = RouteParameter.Optional });
+            //configuration.Routes.MapHttpRoute("Sessions", "sessions/{sessionId}", new { controller = "sessions", sessionId = RouteParameter.Optional });
             configuration.Routes.MapHttpRoute("Speakers", "speakers/{speakerId}", new {controller = "speakers", speakerId = RouteParameter.Optional });
         }
 
@@ -27,6 +27,7 @@ namespace Cas2016.Api
 
             ConfigureAutoFac(app, configuration);
 
+            configuration.MapHttpAttributeRoutes();
             app.UseWebApi(configuration);
         }
 

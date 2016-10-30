@@ -42,9 +42,17 @@ namespace Cas2016.Api.Repositories
                             EndTime = reader.GetDateTime(5)
                         };
 
+                        
+
                         sessions.Add(session);
                     }
                 reader.Close();
+
+                foreach (var session in sessions)
+                {
+                    session.Speakers = GetSpeakersFor(session.Id, connection);
+                }
+
                 connection.Close();
             }
 
@@ -83,40 +91,44 @@ namespace Cas2016.Api.Repositories
                 };
                 reader.Close();
 
-                
-                var speakersIdCommand =
-                    new SqlCommand("SELECT SpeakerId from SessionsSpeakers" +
-                                   "WHERE SessionId = @SessionId");
-
-                var sessionParameter = new SqlParameter
-                {
-                    ParameterName = "@SessionId",
-                    Value = sessionId
-                };
-
-                speakersIdCommand.Parameters.Add(sessionParameter);
-                var speakerReader = command.ExecuteReader();
-
-                var speakers = new List<MinimalSpeakerModel>();
-                while (speakerReader.Read())
-                {
-                    var speakerId = speakerReader.GetInt32(0);
-                    var speaker = _speakerRepository.Get(speakerId);
-                    speakers.Add(new MinimalSpeakerModel
-                    {
-                        Id = speaker.Id,
-                        FirstName = speaker.FirstName,
-                        LastName = speaker.LastName
-                    });
-                }
-                speakerReader.Close();
-                
+                var speakers = GetSpeakersFor(sessionId, connection);
 
                 connection.Close();
 
                 session.Speakers = speakers;
                 return session;
             }
+        }
+
+        private List<MinimalSpeakerModel> GetSpeakersFor(int sessionId, SqlConnection connection)
+        {
+            var speakersIdCommand =
+                new SqlCommand("SELECT SpeakerId from SessionsSpeakers " +
+                               "WHERE SessionId = @SessionId", connection);
+
+            var sessionParameter = new SqlParameter
+            {
+                ParameterName = "@SessionId",
+                Value = sessionId
+            };
+
+            speakersIdCommand.Parameters.Add(sessionParameter);
+            var speakerReader = speakersIdCommand.ExecuteReader();
+
+            var speakers = new List<MinimalSpeakerModel>();
+            while (speakerReader.Read())
+            {
+                var speakerId = speakerReader.GetInt32(0);
+                var speaker = _speakerRepository.Get(speakerId);
+                speakers.Add(new MinimalSpeakerModel
+                {
+                    Id = speaker.Id,
+                    FirstName = speaker.FirstName,
+                    LastName = speaker.LastName
+                });
+            }
+            speakerReader.Close();
+            return speakers;
         }
     }
 }

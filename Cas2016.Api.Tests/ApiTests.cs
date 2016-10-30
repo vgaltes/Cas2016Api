@@ -57,6 +57,22 @@ namespace Cas2016.Api.Tests
         }
 
         [Test]
+        public async Task CallToSessionsWithADateShouldReturnTheSessionsOfThatDate()
+        {
+            const int expectedNumberOfSessions = 3;
+
+            using (var server = TestServer.Create<Startup>())
+            {
+                var response = await server.HttpClient.GetAsync("/Sessions/2016-12-01");
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+                var content = await response.Content.ReadAsAsync<IList<SessionModel>>();
+
+                content.Should().HaveCount(expectedNumberOfSessions);
+            }
+        }
+
+        [Test]
         public async Task CallToSpeakersShouldReturnTheSpeakers()
         {
             const int numberOfSpeakers = 2;
