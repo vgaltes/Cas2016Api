@@ -69,7 +69,7 @@ namespace Cas2016.Api.Controllers
 
         private MinimalSpeakerModel AddSelfLinkTo(MinimalSpeakerModel speaker)
         {
-            var selfLink = ModelFactory.CreateLink(Url, "self", "Speakers", new { speakerId = speaker.Id });
+            var selfLink = ModelFactory.CreateLink(Url, "self", "Speaker", new { speakerId = speaker.Id });
             speaker.Links = new List<LinkModel> { selfLink };
 
             return speaker;

@@ -115,7 +115,7 @@ namespace Cas2016.Api.Tests
             okResult.Content.All(s => s.Speakers.Count() == 1);
 
             urlHelper.Verify(
-                h => h.Link("Speakers", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)),
+                h => h.Link("Speaker", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)),
                 Times.Exactly(numberOfSessions));
         }
 
@@ -150,7 +150,7 @@ namespace Cas2016.Api.Tests
             okResult.Content.All(s => s.Speakers.Count() == 1);
 
             urlHelper.Verify(
-                h => h.Link("Speakers", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)),
+                h => h.Link("Speaker", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)),
                 Times.Exactly(numberOfSessions));
         }
 
@@ -183,7 +183,7 @@ namespace Cas2016.Api.Tests
             okResult.Content.Speakers.Should().HaveCount(1);
             okResult.Content.Speakers.First().Links.Should().HaveCount(1);
             okResult.Content.Speakers.First().Links.First().Rel.Should().Be("self");
-            urlHelper.Verify(h => h.Link("Speakers", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)));
+            urlHelper.Verify(h => h.Link("Speaker", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)));
         }
 
         [Test]
