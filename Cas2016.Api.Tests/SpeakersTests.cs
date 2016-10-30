@@ -53,7 +53,7 @@ namespace Cas2016.Api.Tests
             okResult.Content.Links.Should().HaveCount(1);
 
             urlHelper.Verify(
-                h => h.Link("Speakers", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)));
+                h => h.Link("Speaker", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Cas2016.Api.Tests
             okResult.Content.All(s =>
             {
                 urlHelper.Verify(
-                    h => h.Link("Speakers", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == s.Id)));
+                    h => h.Link("Speaker", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == s.Id)));
                 return true;
             }
             ).Should().BeTrue();

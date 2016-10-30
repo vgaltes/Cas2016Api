@@ -123,7 +123,8 @@ namespace Cas2016.Api.Tests
             var scriptFilePaths = new[]
             {
                 scriptsBasePath + "InsertSessions.sql",
-                scriptsBasePath + "InsertSpeakers.sql"
+                scriptsBasePath + "InsertSpeakers.sql",
+                scriptsBasePath + "InsertSessionsSpeakers.sql"
             };
 
             dbInitialiser.Seed(scriptFilePaths);
