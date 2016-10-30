@@ -149,6 +149,7 @@
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\ModelFactory.cs" />
     <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Models\MinimalSpeakerModel.cs" />
     <Compile Include="Models\SpeakerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ISpeakerRepository.cs" />

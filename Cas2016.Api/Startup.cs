@@ -38,13 +38,16 @@ namespace Cas2016.Api
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             builder
-                .Register(c => new SessionRepository(ConfigurationProvider.DbConnectionString))
-                .As<ISessionRepository>()
-                .InstancePerRequest();
-            builder
-                .Register(c => new SpeakerRepository(ConfigurationProvider.DbConnectionString))
+                .RegisterType<SpeakerRepository>()
                 .As<ISpeakerRepository>()
-                .InstancePerRequest();
+                .WithParameter("connectionString", ConfigurationProvider.DbConnectionString);
+
+            builder
+                .RegisterType<SessionRepository>()
+                .As<ISessionRepository>()
+                .WithParameter("connectionString", ConfigurationProvider.DbConnectionString);
+
+
 
             var container = builder.Build();
             configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);

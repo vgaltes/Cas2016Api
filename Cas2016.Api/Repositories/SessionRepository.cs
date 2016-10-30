@@ -7,10 +7,12 @@ namespace Cas2016.Api.Repositories
     public class SessionRepository : ISessionRepository
     {
         private readonly string _targetConnectionString;
+        private readonly ISpeakerRepository _speakerRepository;
 
-        public SessionRepository(string connectionString)
+        public SessionRepository(string connectionString, ISpeakerRepository speakerRepository)
         {
             _targetConnectionString = connectionString;
+            _speakerRepository = speakerRepository;
         }
 
         public IEnumerable<SessionModel> GetAll()
@@ -77,11 +79,42 @@ namespace Cas2016.Api.Repositories
                     Duration = reader.GetInt32(3),
                     StartTime = reader.GetDateTime(4),
                     EndTime = reader.GetDateTime(5),
-                    Links = new List<LinkModel>()
+                    Links = new List<LinkModel>(),
                 };
                 reader.Close();
+
+                
+                var speakersIdCommand =
+                    new SqlCommand("SELECT SpeakerId from SessionsSpeakers" +
+                                   "WHERE SessionId = @SessionId");
+
+                var sessionParameter = new SqlParameter
+                {
+                    ParameterName = "@SessionId",
+                    Value = sessionId
+                };
+
+                speakersIdCommand.Parameters.Add(sessionParameter);
+                var speakerReader = command.ExecuteReader();
+
+                var speakers = new List<MinimalSpeakerModel>();
+                while (speakerReader.Read())
+                {
+                    var speakerId = speakerReader.GetInt32(0);
+                    var speaker = _speakerRepository.Get(speakerId);
+                    speakers.Add(new MinimalSpeakerModel
+                    {
+                        Id = speaker.Id,
+                        FirstName = speaker.FirstName,
+                        LastName = speaker.LastName
+                    });
+                }
+                speakerReader.Close();
+                
+
                 connection.Close();
 
+                session.Speakers = speakers;
                 return session;
             }
         }

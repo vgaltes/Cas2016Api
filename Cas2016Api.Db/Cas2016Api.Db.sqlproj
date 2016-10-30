@@ -74,5 +74,6 @@
   <ItemGroup>
     <Build Include="dbo\tables\Sessions.sql" />
     <Build Include="dbo\tables\Speakers.sql" />
+    <Build Include="dbo\tables\SessionsSpeakers.sql" />
   </ItemGroup>
 </Project>

@@ -52,6 +52,7 @@ namespace Cas2016.Api.Tests
                 var content = await response.Content.ReadAsAsync<SessionModel>();
 
                 content.Id.Should().Be(sessionId);
+                content.Speakers.Should().HaveCount(1);
             }
         }
 

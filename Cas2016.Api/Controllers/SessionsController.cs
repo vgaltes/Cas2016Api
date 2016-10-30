@@ -30,6 +30,13 @@ namespace Cas2016.Api.Controllers
 
             var sessionWithSelfLink = AddSelfLinkTo(session);
 
+            foreach (var speaker in sessionWithSelfLink.Speakers)
+            {
+                AddSelfLinkTo(speaker);
+            }
+
+            sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
+
             return Ok(sessionWithSelfLink);
         }
 
@@ -39,6 +46,14 @@ namespace Cas2016.Api.Controllers
             session.Links = new List<LinkModel> {selfLink};
 
             return session;
+        }
+
+        private MinimalSpeakerModel AddSelfLinkTo(MinimalSpeakerModel speaker)
+        {
+            var selfLink = ModelFactory.CreateLink(Url, "self", "Speakers", new { speakerId = speaker.Id });
+            speaker.Links = new List<LinkModel> { selfLink };
+
+            return speaker;
         }
     }
 }

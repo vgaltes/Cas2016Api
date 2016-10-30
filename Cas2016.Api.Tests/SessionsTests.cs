@@ -84,5 +84,37 @@ namespace Cas2016.Api.Tests
                 }
             ).Should().BeTrue();
         }
+
+        [Test]
+        public void SessionShouldIncludeListOfAuthors()
+        {
+            const int sessionId = 1;
+            const int speakerId = 1;
+
+            var author = new Fixture().Build<MinimalSpeakerModel>()
+                .Without(s => s.Links)
+                .With(s => s.Id, speakerId)
+                .Create();
+
+            var sessionReturnedByRepo =
+                new Fixture().Build<SessionModel>()
+                .Without(s => s.Links).With(s => s.Id, 1)
+                .With(s => s.Speakers, new [] {author})
+                .Create();
+
+            var urlHelper = new Mock<UrlHelper>();
+
+            var sessionsController =
+                new SessionsControllerBuilder().With(urlHelper).Returning(new[] { sessionReturnedByRepo }).Build();
+
+            var response = sessionsController.Get(sessionId);
+
+            var okResult = (OkNegotiatedContentResult<SessionModel>)response;
+
+            okResult.Content.Speakers.Should().HaveCount(1);
+            okResult.Content.Speakers.First().Links.Should().HaveCount(1);
+            okResult.Content.Speakers.First().Links.First().Rel.Should().Be("self");
+            urlHelper.Verify(h => h.Link("Speakers", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)));
+        }
     }
 }

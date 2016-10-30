@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Cas2016.Api.Models
 {
@@ -13,6 +11,7 @@ namespace Cas2016.Api.Models
         public int Duration { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public IEnumerable<MinimalSpeakerModel> Speakers { get; set; }
 
         public ICollection<LinkModel> Links { get; set; }
     }
