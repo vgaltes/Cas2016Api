@@ -14,5 +14,6 @@ namespace Cas2016.Api.Models
         public IEnumerable<MinimalSpeakerModel> Speakers { get; set; }
 
         public ICollection<LinkModel> Links { get; set; }
+        public IEnumerable<TagModel> Tags { get; set; }
     }
 }

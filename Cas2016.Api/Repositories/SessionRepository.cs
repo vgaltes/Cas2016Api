@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using Cas2016.Api.Models;
 
 namespace Cas2016.Api.Repositories
@@ -39,11 +40,10 @@ namespace Cas2016.Api.Repositories
                             Description = reader.GetString(2),
                             Duration = reader.GetInt32(3),
                             StartTime = reader.GetDateTime(4),
-                            EndTime = reader.GetDateTime(5)
+                            EndTime = reader.GetDateTime(5),
+                            Tags = GetTagsFrom(reader.GetString(6))
                         };
-
                         
-
                         sessions.Add(session);
                     }
                 reader.Close();
@@ -129,6 +129,11 @@ namespace Cas2016.Api.Repositories
             }
             speakerReader.Close();
             return speakers;
+        }
+
+        private IEnumerable<TagModel> GetTagsFrom(string tags)
+        {
+            return tags.Split(';').Select(t => t.Trim()).Select(t => new TagModel {Name = t});
         }
     }
 }

@@ -5,5 +5,6 @@
 	[Description] NVARCHAR(MAX) NOT NULL, 
     [Duration] INT NOT NULL, 
     [StartTime] DATETIME2 NULL, 
-    [EndTime] DATETIME2 NULL 
+    [EndTime] DATETIME2 NULL, 
+    [Tags] NVARCHAR(MAX) NULL 
 )

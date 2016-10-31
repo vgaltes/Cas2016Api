@@ -27,6 +27,7 @@ namespace Cas2016.Api.Controllers
             foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
             {
                 sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
             }
 
             return Ok(sessionsWithSelfLinks);
@@ -40,6 +41,7 @@ namespace Cas2016.Api.Controllers
             var sessionWithSelfLink = AddSelfLinkTo(session);
 
             sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
+            sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
 
             return Ok(sessionWithSelfLink);
         }
@@ -54,9 +56,16 @@ namespace Cas2016.Api.Controllers
             foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
             {
                 sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
             }
 
             return Ok(sessionsWithSelfLinks);
+        }
+
+        [Route("tags/{name}", Name = "Tag")]
+        public IHttpActionResult Get(string name)
+        {
+            return Ok();
         }
 
         private SessionModel AddSelfLinkTo(SessionModel session)
@@ -73,6 +82,14 @@ namespace Cas2016.Api.Controllers
             speaker.Links = new List<LinkModel> { selfLink };
 
             return speaker;
+        }
+
+        private TagModel AddSelfLinkTo(TagModel tag)
+        {
+            var selfLink = ModelFactory.CreateLink(Url, "self", "Tag", new { name = tag.Name });
+            tag.Links = new List<LinkModel> { selfLink };
+
+            return tag;
         }
     }
 }

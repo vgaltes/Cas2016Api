@@ -146,6 +146,7 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
     <Compile Include="Controllers\SpeakersController.cs" />
+    <Compile Include="Models\TagModel.cs" />
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\ModelFactory.cs" />
     <Compile Include="Models\SessionModel.cs" />

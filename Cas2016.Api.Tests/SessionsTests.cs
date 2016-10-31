@@ -243,5 +243,106 @@ namespace Cas2016.Api.Tests
             }
             ).Should().BeTrue();
         }
+
+        [Test]
+        public void SessionsReturnedBySessionsShouldIncludeTags()
+        {
+            const int numberOfSessions = 5;
+            const string tagName = "agile";
+
+            var tag = new Fixture().Build<TagModel>()
+                .Without(t => t.Links)
+                .With(t => t.Name, tagName)
+                .Create();
+
+            var sessionsReturnedByRepo = new Fixture()
+                .Build<SessionModel>()
+                .Without(s => s.Links).With(s => s.Id, 1)
+                .With(s => s.Tags, new[] { tag })
+                .CreateMany(numberOfSessions);
+
+            var urlHelper = new Mock<UrlHelper>();
+
+            var sessionsController = new SessionsControllerBuilder()
+                .With(urlHelper).Returning(sessionsReturnedByRepo).Build();
+
+            var response = sessionsController.Get();
+
+            var okResult =
+                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+
+            okResult.Content.All(s => s.Tags.Count() == 1);
+
+            urlHelper.Verify(
+                h => h.Link("Tag", It.Is<object>(o => o.GetPropertyValue<string>("name") == tagName)),
+                Times.Exactly(numberOfSessions));
+        }
+
+        [Test]
+        public void SessionsByDateShouldIncludeTags()
+        {
+            const int numberOfSessions = 5;
+            const string tagName = "agile";
+
+            var tag = new Fixture().Build<TagModel>()
+                .Without(t => t.Links)
+                .With(t => t.Name, tagName)
+                .Create();
+
+            var sessionsReturnedByRepo = new Fixture()
+                .Build<SessionModel>()
+                .Without(s => s.Links).With(s => s.Id, 1)
+                .With(s => s.Tags, new[] { tag })
+                .With(s => s.StartTime, DateTime.Now)
+                .CreateMany(numberOfSessions);
+
+            var urlHelper = new Mock<UrlHelper>();
+
+            var sessionsController = new SessionsControllerBuilder()
+                .With(urlHelper).Returning(sessionsReturnedByRepo).Build();
+
+            var response = sessionsController.Get(DateTime.Today);
+
+            var okResult =
+                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+
+            okResult.Content.All(s => s.Tags.Count() == 1);
+
+            urlHelper.Verify(
+                h => h.Link("Tag", It.Is<object>(o => o.GetPropertyValue<string>("name") == tagName)),
+                Times.Exactly(numberOfSessions));
+        }
+
+        [Test]
+        public void SessionShouldIncludeListOfTags()
+        {
+            const int sessionId = 1;
+            const string tagName = "agile";
+
+            var tag = new Fixture().Build<TagModel>()
+                .Without(t => t.Links)
+                .With(t => t.Name, tagName)
+                .Create();
+
+            var sessionReturnedByRepo =
+                new Fixture().Build<SessionModel>()
+                .Without(s => s.Links).With(s => s.Id, 1)
+                .With(s => s.Tags, new[] { tag })
+                .Create();
+
+            var urlHelper = new Mock<UrlHelper>();
+
+            var sessionsController =
+                new SessionsControllerBuilder().With(urlHelper).Returning(new[] { sessionReturnedByRepo }).Build();
+
+            var response = sessionsController.Get(sessionId);
+
+            var okResult = (OkNegotiatedContentResult<SessionModel>)response;
+
+            okResult.Content.Tags.Should().HaveCount(1);
+            urlHelper.Verify(
+                h => h.Link("Tag", It.Is<object>(o => o.GetPropertyValue<string>("name") == tagName)),
+                Times.Once);
+        }
     }
 }
