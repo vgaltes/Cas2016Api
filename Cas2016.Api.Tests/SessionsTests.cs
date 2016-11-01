@@ -344,5 +344,27 @@ namespace Cas2016.Api.Tests
                 h => h.Link("Tag", It.Is<object>(o => o.GetPropertyValue<string>("name") == tagName)),
                 Times.Once);
         }
+
+        [Test]
+        public void TagShouldReturnAllSessionsWithThatTag()
+        {
+            const int numberOfSessions = 5;
+
+            var sessionsReturnedByRepo = new Fixture()
+                .Build<SessionModel>()
+                .Without(s => s.Links).With(s => s.Id, 1)
+                .CreateMany(numberOfSessions);
+
+            var sessionsController = new SessionsControllerBuilder()
+                .Returning(sessionsReturnedByRepo).Build();
+
+            var response = sessionsController.Get(sessionsReturnedByRepo.First().Tags.First().Name);
+
+            var okResult =
+                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+
+            okResult.Content.Should().HaveCount(1);
+
+        }
     }
 }

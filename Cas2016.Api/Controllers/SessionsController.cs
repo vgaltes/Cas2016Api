@@ -65,7 +65,19 @@ namespace Cas2016.Api.Controllers
         [Route("tags/{name}", Name = "Tag")]
         public IHttpActionResult Get(string name)
         {
-            return Ok();
+            var allSessions = _sessionsRepository.GetAll();
+
+            var sessionsWithTag = allSessions.Where(s => s.Tags.Any(t => t.Name == name));
+
+            var sessionsWithSelfLinks = sessionsWithTag.Select(AddSelfLinkTo);
+
+            foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
+            {
+                sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
+            }
+
+            return Ok(sessionsWithSelfLinks);
         }
 
         private SessionModel AddSelfLinkTo(SessionModel session)
