@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Cas2016.Api.Models
 {
@@ -18,5 +15,6 @@ namespace Cas2016.Api.Models
         public string City { get; set; }
         public string Country { get; set; }
         public ICollection<LinkModel> Links { get; set; }
+        public IEnumerable<MinimalSessionModel> Sessions { get; set; }
     }
 }

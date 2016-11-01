@@ -148,6 +148,7 @@
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\SpeakersController.cs" />
     <Compile Include="Models\RoomModel.cs" />
+    <Compile Include="Models\MinimalSessionModel.cs" />
     <Compile Include="Models\TagModel.cs" />
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\ModelFactory.cs" />

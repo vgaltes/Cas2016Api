@@ -10,10 +10,12 @@ namespace Cas2016.Api.Controllers
     public class RoomsController : ApiController
     {
         private readonly IRoomRepository _roomRepository;
+        private readonly ISessionRepository _sessionRepository;
 
-        public RoomsController(IRoomRepository roomRepository)
+        public RoomsController(IRoomRepository roomRepository, ISessionRepository sessionRepository)
         {
             _roomRepository = roomRepository;
+            _sessionRepository = sessionRepository;
         }
 
         [Route("", Name = "Rooms")]
@@ -22,6 +24,14 @@ namespace Cas2016.Api.Controllers
             var rooms = _roomRepository.GetAll();
 
             var roomsWithSelfLink = rooms.Select(AddSelfLinkTo);
+
+            var sessions = _sessionRepository.GetAll();
+
+            foreach (var room in roomsWithSelfLink)
+            {
+                room.Sessions = sessions.Where(s => s.Room.Id == room.Id).Select(ConvertToMinimalSessionModel);
+                room.Sessions = room.Sessions.Select(AddSelfLinkTo);
+            }
 
             return Ok(roomsWithSelfLink);
         }
@@ -33,7 +43,19 @@ namespace Cas2016.Api.Controllers
 
             var roomWithSelfLink = AddSelfLinkTo(room);
 
+            var sessions = _sessionRepository.GetAll();
+            room.Sessions = sessions.Where(s => s.Room.Id == roomId).Select(ConvertToMinimalSessionModel);
+            room.Sessions = room.Sessions.Select(AddSelfLinkTo);
             return Ok(roomWithSelfLink);
+        }
+
+        private MinimalSessionModel ConvertToMinimalSessionModel(SessionModel session)
+        {
+            return new MinimalSessionModel
+            {
+                Id = session.Id,
+                Title = session.Title
+            };
         }
 
         private RoomModel AddSelfLinkTo(RoomModel room)
@@ -42,6 +64,14 @@ namespace Cas2016.Api.Controllers
             room.Links = new List<LinkModel> { selfLink };
 
             return room;
+        }
+
+        private MinimalSessionModel AddSelfLinkTo(MinimalSessionModel session)
+        {
+            var selfLink = ModelFactory.CreateLink(Url, "self", "Session", new { sessionId = session.Id });
+            session.Links = new List<LinkModel> { selfLink };
+
+            return session;
         }
     }
 }

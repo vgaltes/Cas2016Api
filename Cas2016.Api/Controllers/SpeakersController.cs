@@ -6,7 +6,7 @@ using Cas2016.Api.Repositories;
 
 namespace Cas2016.Api.Controllers
 {
-    [RoutePrefix("Speakers")]
+    [RoutePrefix("speakers")]
     public class SpeakersController : ApiController
     {
         private readonly ISpeakerRepository _speakerRepository;
@@ -23,6 +23,11 @@ namespace Cas2016.Api.Controllers
 
             var speakersWithSelfLink = speakers.Select(AddSelfLinkTo);
 
+            foreach (var speakerWithSelfLink in speakersWithSelfLink)
+            {
+                speakerWithSelfLink.Sessions = speakerWithSelfLink.Sessions.Select(AddSelfLinkTo);
+            }
+
             return Ok(speakersWithSelfLink);
         }
 
@@ -33,7 +38,17 @@ namespace Cas2016.Api.Controllers
 
             var speakerWithSelfLink = AddSelfLinkTo(speaker);
 
+            speakerWithSelfLink.Sessions = speakerWithSelfLink.Sessions.Select(AddSelfLinkTo);
+
             return Ok(speakerWithSelfLink);
+        }
+
+        private MinimalSessionModel AddSelfLinkTo(MinimalSessionModel session)
+        {
+            var selfLink = ModelFactory.CreateLink(Url, "self", "Session", new { sessionId = session.Id });
+            session.Links = new List<LinkModel> { selfLink };
+
+            return session;
         }
 
         private SpeakerModel AddSelfLinkTo(SpeakerModel speaker)

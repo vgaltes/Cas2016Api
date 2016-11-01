@@ -35,6 +35,11 @@ namespace Cas2016.Api.Repositories
                         speakers.Add(speaker);
                     }
                 reader.Close();
+
+                foreach (var speaker in speakers)
+                {
+                    speaker.Sessions = GetSessionsFor(speaker.Id, connection);
+                }
                 connection.Close();
             }
 
@@ -63,6 +68,8 @@ namespace Cas2016.Api.Repositories
                 reader.Read();
                 var speaker = GetSpeakerFrom(reader);
                 reader.Close();
+
+                speaker.Sessions = GetSessionsFor(speaker.Id, connection);
                 connection.Close();
 
                 return speaker;
@@ -85,6 +92,35 @@ namespace Cas2016.Api.Repositories
                 Country = reader.GetString(9)
             };
             return speaker;
+        }
+
+        private IEnumerable<MinimalSessionModel> GetSessionsFor(int speakerId, SqlConnection connection)
+        {
+            var sessionsIdCommand =
+                new SqlCommand("SELECT sp.SessionId, s.Title from SessionsSpeakers sp " +
+                               "JOIN Sessions s on sp.SessionId = s.Id " +
+                               "WHERE SpeakerId = @SpeakerId", connection);
+
+            var speakerParameter = new SqlParameter
+            {
+                ParameterName = "@SpeakerId",
+                Value = speakerId
+            };
+
+            sessionsIdCommand.Parameters.Add(speakerParameter);
+            var sessionReader = sessionsIdCommand.ExecuteReader();
+
+            var sessions = new List<MinimalSessionModel>();
+            while (sessionReader.Read())
+            {
+                sessions.Add(new MinimalSessionModel
+                {
+                    Id = sessionReader.GetInt32(0),
+                    Title = sessionReader.GetString(1)
+                });
+            }
+            sessionReader.Close();
+            return sessions;
         }
     }
 }
