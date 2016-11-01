@@ -9,11 +9,14 @@ namespace Cas2016.Api.Repositories
     {
         private readonly string _targetConnectionString;
         private readonly ISpeakerRepository _speakerRepository;
+        private readonly IRoomRepository _roomRepository;
 
-        public SessionRepository(string connectionString, ISpeakerRepository speakerRepository)
+        public SessionRepository(string connectionString, ISpeakerRepository speakerRepository,
+            IRoomRepository roomRepository)
         {
             _targetConnectionString = connectionString;
             _speakerRepository = speakerRepository;
+            _roomRepository = roomRepository;
         }
 
         public IEnumerable<SessionModel> GetAll()
@@ -33,17 +36,8 @@ namespace Cas2016.Api.Repositories
                 if (reader.HasRows)
                     while (reader.Read())
                     {
-                        var session = new SessionModel
-                        {
-                            Id = reader.GetInt32(0),
-                            Title = reader.GetString(1),
-                            Description = reader.GetString(2),
-                            Duration = reader.GetInt32(3),
-                            StartTime = reader.GetDateTime(4),
-                            EndTime = reader.GetDateTime(5),
-                            Tags = GetTagsFrom(reader.GetString(6))
-                        };
-                        
+                        var session = GetSessionFrom(reader);
+
                         sessions.Add(session);
                     }
                 reader.Close();
@@ -79,25 +73,33 @@ namespace Cas2016.Api.Repositories
                 var reader = command.ExecuteReader();
 
                 reader.Read();
-                var session = new SessionModel
-                {
-                    Id = reader.GetInt32(0),
-                    Title = reader.GetString(1),
-                    Description = reader.GetString(2),
-                    Duration = reader.GetInt32(3),
-                    StartTime = reader.GetDateTime(4),
-                    EndTime = reader.GetDateTime(5),
-                    Links = new List<LinkModel>(),
-                };
+                var session = GetSessionFrom(reader);
                 reader.Close();
 
                 var speakers = GetSpeakersFor(sessionId, connection);
+                
 
                 connection.Close();
 
                 session.Speakers = speakers;
                 return session;
             }
+        }
+
+        private SessionModel GetSessionFrom(SqlDataReader reader)
+        {
+            var session = new SessionModel
+            {
+                Id = reader.GetInt32(0),
+                Title = reader.GetString(1),
+                Description = reader.GetString(2),
+                Duration = reader.GetInt32(3),
+                StartTime = reader.GetDateTime(4),
+                EndTime = reader.GetDateTime(5),
+                Tags = GetTagsFrom(reader.GetString(6)),
+                Room = _roomRepository.Get(reader.GetInt32(7))
+            };
+            return session;
         }
 
         private List<MinimalSpeakerModel> GetSpeakersFor(int sessionId, SqlConnection connection)

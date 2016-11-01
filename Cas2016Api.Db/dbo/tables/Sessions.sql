@@ -6,5 +6,6 @@
     [Duration] INT NOT NULL, 
     [StartTime] DATETIME2 NULL, 
     [EndTime] DATETIME2 NULL, 
-    [Tags] NVARCHAR(MAX) NULL 
+    [Tags] NVARCHAR(MAX) NULL, 
+    [Room] INT NOT NULL 
 )

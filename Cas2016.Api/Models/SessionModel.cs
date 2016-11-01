@@ -15,5 +15,6 @@ namespace Cas2016.Api.Models
 
         public ICollection<LinkModel> Links { get; set; }
         public IEnumerable<TagModel> Tags { get; set; }
+        public RoomModel Room { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace Cas2016.Api.Controllers
             {
                 sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
                 sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
             }
 
             return Ok(sessionsWithSelfLinks);
@@ -42,6 +43,7 @@ namespace Cas2016.Api.Controllers
 
             sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
             sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
+            sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
 
             return Ok(sessionWithSelfLink);
         }
@@ -57,6 +59,7 @@ namespace Cas2016.Api.Controllers
             {
                 sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
                 sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
             }
 
             return Ok(sessionsWithSelfLinks);
@@ -75,6 +78,7 @@ namespace Cas2016.Api.Controllers
             {
                 sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
                 sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
             }
 
             return Ok(sessionsWithSelfLinks);
@@ -102,6 +106,14 @@ namespace Cas2016.Api.Controllers
             tag.Links = new List<LinkModel> { selfLink };
 
             return tag;
+        }
+
+        private RoomModel AddSelfLinkTo(RoomModel room)
+        {
+            var selfLink = ModelFactory.CreateLink(Url, "self", "Room", new { roomId = room.Id });
+            room.Links = new List<LinkModel> { selfLink };
+
+            return room;
         }
     }
 }
