@@ -104,6 +104,22 @@ namespace Cas2016.Api.Tests
             }
         }
 
+        [Test]
+        public async Task CallToRoomsShouldReturnTheRooms()
+        {
+            const int numberOfRooms = 2;
+
+            using (var server = TestServer.Create<Startup>())
+            {
+                var response = await server.HttpClient.GetAsync($"/Rooms");
+
+                response.IsSuccessStatusCode.Should().BeTrue();
+                var content = await response.Content.ReadAsAsync<IList<SpeakerModel>>();
+
+                content.Should().HaveCount(numberOfRooms);
+            }
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -124,7 +140,8 @@ namespace Cas2016.Api.Tests
             {
                 scriptsBasePath + "InsertSessions.sql",
                 scriptsBasePath + "InsertSpeakers.sql",
-                scriptsBasePath + "InsertSessionsSpeakers.sql"
+                scriptsBasePath + "InsertSessionsSpeakers.sql",
+                scriptsBasePath + "InsertRooms.sql"
             };
 
             dbInitialiser.Seed(scriptFilePaths);

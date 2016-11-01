@@ -75,5 +75,6 @@
     <Build Include="dbo\tables\Sessions.sql" />
     <Build Include="dbo\tables\Speakers.sql" />
     <Build Include="dbo\tables\SessionsSpeakers.sql" />
+    <Build Include="dbo\tables\Rooms.sql" />
   </ItemGroup>
 </Project>

@@ -39,7 +39,10 @@ namespace Cas2016.Api
                 .As<ISessionRepository>()
                 .WithParameter("connectionString", ConfigurationProvider.DbConnectionString);
 
-
+            builder
+                .RegisterType<RoomRepository>()
+                .As<IRoomRepository>()
+                .WithParameter("connectionString", ConfigurationProvider.DbConnectionString);
 
             var container = builder.Build();
             configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
