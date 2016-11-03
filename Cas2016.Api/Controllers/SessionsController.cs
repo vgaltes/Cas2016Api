@@ -65,6 +65,23 @@ namespace Cas2016.Api.Controllers
             return Ok(sessionsWithSelfLinks);
         }
 
+        [Route("{sessionDate:datetime}/{hour:int}")]
+        public IHttpActionResult Get(DateTime sessionDate, int hour)
+        {
+            var sessions = _sessionsRepository.GetAll().Where(s => s.StartTime.Date == sessionDate.Date && s.StartTime.Hour <= hour && s.EndTime.Hour >= hour);
+
+            var sessionsWithSelfLinks = sessions.Select(AddSelfLinkTo);
+
+            foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
+            {
+                sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
+                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
+            }
+
+            return Ok(sessionsWithSelfLinks);
+        }
+
         [Route("tags/{name}", Name = "Tag")]
         public IHttpActionResult Get(string name)
         {
