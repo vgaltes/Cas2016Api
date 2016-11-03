@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cas2016.Api.Tests", "Cas201
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Cas2016Api.Db", "Cas2016Api.Db\Cas2016Api.Db.sqlproj", "{CE9B9BE2-301A-4BC4-BDEA-6ACEE28B4E7C}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Cas2016Api.Db.DataLoader", "Cas2016Api.Db.DataLoader\Cas2016Api.Db.DataLoader.fsproj", "{6EA987F0-3445-4F45-80B7-9ABEE28739C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,12 @@ Global
 		{CE9B9BE2-301A-4BC4-BDEA-6ACEE28B4E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE9B9BE2-301A-4BC4-BDEA-6ACEE28B4E7C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CE9B9BE2-301A-4BC4-BDEA-6ACEE28B4E7C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6EA987F0-3445-4F45-80B7-9ABEE28739C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA987F0-3445-4F45-80B7-9ABEE28739C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EA987F0-3445-4F45-80B7-9ABEE28739C4}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA987F0-3445-4F45-80B7-9ABEE28739C4}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{6EA987F0-3445-4F45-80B7-9ABEE28739C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EA987F0-3445-4F45-80B7-9ABEE28739C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

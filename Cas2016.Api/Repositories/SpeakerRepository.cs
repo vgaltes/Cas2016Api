@@ -81,8 +81,7 @@ namespace Cas2016.Api.Repositories
             var speaker = new SpeakerModel
             {
                 Id = reader.GetInt32(0),
-                FirstName = reader.GetString(1),
-                LastName = reader.GetString(2),
+                Name = reader.GetString(1),
                 TwitterProfile = reader.IsDBNull(3) ? null : reader.GetString(3),
                 LinkedinProfile = reader.IsDBNull(4) ? null : reader.GetString(4),
                 Website = reader.IsDBNull(5) ? null : reader.GetString(5),

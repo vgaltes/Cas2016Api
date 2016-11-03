@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Cas2016.Api.Configuration;
@@ -19,6 +20,9 @@ namespace Cas2016.Api
             ConfigureAutoFac(app, configuration);
 
             configuration.MapHttpAttributeRoutes();
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            configuration.EnableCors(cors);
+
             app.UseWebApi(configuration);
         }
 

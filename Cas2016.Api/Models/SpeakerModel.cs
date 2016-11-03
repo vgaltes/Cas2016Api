@@ -5,8 +5,7 @@ namespace Cas2016.Api.Models
     public class SpeakerModel
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Name { get; set; }
         public string TwitterProfile { get; set; }
         public string LinkedinProfile { get; set; }
         public string Website { get; set; }

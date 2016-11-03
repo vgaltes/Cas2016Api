@@ -125,8 +125,7 @@ namespace Cas2016.Api.Repositories
                 speakers.Add(new MinimalSpeakerModel
                 {
                     Id = speaker.Id,
-                    FirstName = speaker.FirstName,
-                    LastName = speaker.LastName
+                    Name = speaker.Name
                 });
             }
             speakerReader.Close();
