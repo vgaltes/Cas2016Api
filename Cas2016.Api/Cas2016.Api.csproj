@@ -154,6 +154,7 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\SessionsController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
+    <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\SpeakersController.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\MinimalSessionModel.cs" />
