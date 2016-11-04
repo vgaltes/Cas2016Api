@@ -6,7 +6,7 @@ using Cas2016.Api.Repositories;
 
 namespace Cas2016.Api.Controllers
 {
-    [RoutePrefix("Rooms")]
+    [RoutePrefix("rooms")]
     public class RoomsController : ApiController
     {
         private readonly IRoomRepository _roomRepository;

@@ -1,10 +1,14 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Net.Http.Formatting;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Cas2016.Api.Configuration;
+using Cas2016.Api.Converters;
 using Cas2016.Api.Repositories;
+using Newtonsoft.Json.Serialization;
 using Owin;
 
 namespace Cas2016.Api
@@ -21,6 +25,12 @@ namespace Cas2016.Api
 
             configuration.MapHttpAttributeRoutes();
             var cors = new EnableCorsAttribute("*", "*", "*");
+
+            var jsonFormatter = configuration.Formatters.OfType<JsonMediaTypeFormatter>().FirstOrDefault();
+            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            jsonFormatter.SerializerSettings.Converters.Add(new LinkModelConverter());
+
+
             configuration.EnableCors(cors);
 
             app.UseWebApi(configuration);

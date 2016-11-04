@@ -135,7 +135,7 @@ namespace Cas2016.Api.Repositories
 
         private IEnumerable<TagModel> GetTagsFrom(string tags)
         {
-            return tags.Split(new char[';'], StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).Select(t => new TagModel {Name = t});
+            return tags.Split(new [] {";"}, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).Select(t => new TagModel {Name = t});
         }
     }
 }
