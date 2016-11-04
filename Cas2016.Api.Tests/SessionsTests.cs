@@ -51,7 +51,7 @@ namespace Cas2016.Api.Tests
 
             var okResult = (OkNegotiatedContentResult<SessionModel>) response;
 
-            okResult.Content.Links.Should().HaveCount(1);
+            okResult.Content.Links.Count.Should().BeGreaterOrEqualTo(1);
 
             urlHelper.Verify(
                 h => h.Link("Session", It.Is<object>(o => o.GetPropertyValue<int>("sessionId") == sessionId)));

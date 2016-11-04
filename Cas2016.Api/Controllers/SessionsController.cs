@@ -40,6 +40,8 @@ namespace Cas2016.Api.Controllers
             var session = _sessionsRepository.Get(sessionId);
 
             var sessionWithSelfLink = AddSelfLinkTo(session);
+            sessionWithSelfLink = AddDateLinkTo(sessionWithSelfLink);
+            sessionWithSelfLink = AddHourLinkTo(sessionWithSelfLink);
 
             sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
             sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
@@ -48,7 +50,7 @@ namespace Cas2016.Api.Controllers
             return Ok(sessionWithSelfLink);
         }
 
-        [Route("{sessionDate:datetime}")]
+        [Route("{sessionDate:datetime}", Name = "Date")]
         public IHttpActionResult Get(DateTime sessionDate)
         {
             var sessions = _sessionsRepository.GetAll().Where(s => s.StartTime.Date == sessionDate.Date);
@@ -65,7 +67,7 @@ namespace Cas2016.Api.Controllers
             return Ok(sessionsWithSelfLinks);
         }
 
-        [Route("{sessionDate:datetime}/{hour:int}")]
+        [Route("{sessionDate:datetime}/{hour:int}", Name = "Hour")]
         public IHttpActionResult Get(DateTime sessionDate, int hour)
         {
             var sessions = _sessionsRepository.GetAll().Where(s => s.StartTime.Date == sessionDate.Date && s.StartTime.Hour <= hour && s.EndTime.Hour >= hour);
@@ -90,6 +92,7 @@ namespace Cas2016.Api.Controllers
             var sessionsWithTag = allSessions.Where(s => s.Tags.Any(t => t.Name == name));
 
             var sessionsWithSelfLinks = sessionsWithTag.Select(AddSelfLinkTo);
+            
 
             foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
             {
@@ -105,6 +108,27 @@ namespace Cas2016.Api.Controllers
         {
             var selfLink = ModelFactory.CreateLink(Url, "self", "Session", new {sessionId = session.Id});
             session.Links = new List<LinkModel> {selfLink};
+
+            return session;
+        }
+
+        private string GetDate(DateTime date)
+        {
+            return $"{date.Year}-{date.Month}-{date.Day}";
+        }
+
+        private SessionModel AddDateLinkTo(SessionModel session)
+        {
+            var dateLink = ModelFactory.CreateLink(Url, "date", "Date", new { sessionDate = GetDate(session.StartTime.Date) });
+            session.Links.Add(dateLink);
+
+            return session;
+        }
+
+        private SessionModel AddHourLinkTo(SessionModel session)
+        {
+            var hourLink = ModelFactory.CreateLink(Url, "hour", "Hour", new { sessionDate = GetDate(session.StartTime.Date), hour = session.StartTime.Hour });
+            session.Links.Add(hourLink);
 
             return session;
         }
