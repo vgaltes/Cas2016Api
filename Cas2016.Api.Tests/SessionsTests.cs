@@ -112,7 +112,7 @@ namespace Cas2016.Api.Tests
             var okResult =
                 (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
 
-            okResult.Content.All(s => s.Speakers.Count() == 1);
+            okResult.Content.All(s => s.Speakers.Count() == 1).Should().BeTrue();
 
             urlHelper.Verify(
                 h => h.Link("Speaker", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)),
@@ -147,7 +147,7 @@ namespace Cas2016.Api.Tests
             var okResult =
                 (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
 
-            okResult.Content.All(s => s.Speakers.Count() == 1);
+            okResult.Content.All(s => s.Speakers.Count() == 1).Should().BeTrue();
 
             urlHelper.Verify(
                 h => h.Link("Speaker", It.Is<object>(o => o.GetPropertyValue<int>("speakerId") == speakerId)),
@@ -271,7 +271,7 @@ namespace Cas2016.Api.Tests
             var okResult =
                 (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
 
-            okResult.Content.All(s => s.Tags.Count() == 1);
+            okResult.Content.All(s => s.Tags.Count() == 1).Should().BeTrue();
 
             urlHelper.Verify(
                 h => h.Link("Tag", It.Is<object>(o => o.GetPropertyValue<string>("name") == tagName)),
@@ -306,7 +306,7 @@ namespace Cas2016.Api.Tests
             var okResult =
                 (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
 
-            okResult.Content.All(s => s.Tags.Count() == 1);
+            okResult.Content.All(s => s.Tags.Count() == 1).Should().BeTrue();
 
             urlHelper.Verify(
                 h => h.Link("Tag", It.Is<object>(o => o.GetPropertyValue<string>("name") == tagName)),

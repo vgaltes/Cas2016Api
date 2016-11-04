@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Cas2016.Api.Models;
@@ -134,7 +135,7 @@ namespace Cas2016.Api.Repositories
 
         private IEnumerable<TagModel> GetTagsFrom(string tags)
         {
-            return tags.Split(';').Select(t => t.Trim()).Select(t => new TagModel {Name = t});
+            return tags.Split(new char[';'], StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).Select(t => new TagModel {Name = t});
         }
     }
 }
