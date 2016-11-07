@@ -5,7 +5,7 @@ namespace Cas2016.Api.Repositories
 {
     public interface IRoomRepository
     {
-        IEnumerable<RoomModel> GetAll();
+        List<RoomModel> GetAll();
         RoomModel Get(int roomId);
     }
 }

@@ -20,7 +20,7 @@ namespace Cas2016.Api.Repositories
             _roomRepository = roomRepository;
         }
 
-        public IEnumerable<SessionModel> GetAll()
+        public List<SessionModel> GetAll()
         {
             var sessions = new List<SessionModel>();
 
@@ -126,16 +126,17 @@ namespace Cas2016.Api.Repositories
                 speakers.Add(new MinimalSpeakerModel
                 {
                     Id = speaker.Id,
-                    Name = speaker.Name
+                    Name = speaker.Name,
+                    Links = new List<LinkModel>()
                 });
             }
             speakerReader.Close();
             return speakers;
         }
 
-        private IEnumerable<TagModel> GetTagsFrom(string tags)
+        private List<TagModel> GetTagsFrom(string tags)
         {
-            return tags.Split(new [] {";"}, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).Select(t => new TagModel {Name = t});
+            return tags.Split(new [] {";"}, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).Select(t => new TagModel {Name = t}).ToList();
         }
     }
 }

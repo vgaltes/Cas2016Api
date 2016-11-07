@@ -13,7 +13,7 @@ namespace Cas2016.Api.Repositories
             _targetConnectionString = connectionString;
         }
 
-        public IEnumerable<RoomModel> GetAll()
+        public List<RoomModel> GetAll()
         {
             var rooms = new List<RoomModel>();
 

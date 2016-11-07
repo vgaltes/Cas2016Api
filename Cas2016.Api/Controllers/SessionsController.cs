@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Cas2016.Api.Models;
@@ -22,16 +21,14 @@ namespace Cas2016.Api.Controllers
         {
             var sessions = _sessionsRepository.GetAll();
 
-            var sessionsWithSelfLinks = sessions.Select(AddSelfLinkTo);
+            sessions.ForEach(s => s.AddSelfLink(Url));
 
-            foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
+            foreach (var sessionWithSelfLink in sessions)
             {
-                sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
+                EnrichSessionWithLinks(sessionWithSelfLink);
             }
 
-            return Ok(sessionsWithSelfLinks);
+            return Ok(sessions);
         }
 
         [Route("{sessionId:int}", Name = "Session")]
@@ -39,77 +36,69 @@ namespace Cas2016.Api.Controllers
         {
             var session = _sessionsRepository.Get(sessionId);
 
-            var sessionWithSelfLink = AddSelfLinkTo(session);
-            sessionWithSelfLink = AddDateLinkTo(sessionWithSelfLink);
-            sessionWithSelfLink = AddHourLinkTo(sessionWithSelfLink);
+            session.AddSelfLink(Url);
+            session = AddDateLinkTo(session);
+            session = AddHourLinkTo(session);
 
-            sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
-            sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
-            sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
+            EnrichSessionWithLinks(session);
 
-            return Ok(sessionWithSelfLink);
+            return Ok(session);
         }
 
         [Route("{sessionDate:datetime}", Name = "Date")]
         public IHttpActionResult Get(DateTime sessionDate)
         {
-            var sessions = _sessionsRepository.GetAll().Where(s => s.StartTime.Date == sessionDate.Date);
+            var sessions = _sessionsRepository.GetAll().Where(s => s.StartTime.Date == sessionDate.Date).ToList();
 
-            var sessionsWithSelfLinks = sessions.Select(AddSelfLinkTo);
+            sessions.ForEach(s => s.AddSelfLink(Url));
 
-            foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
+            foreach (var sessionWithSelfLink in sessions)
             {
-                sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
+                EnrichSessionWithLinks(sessionWithSelfLink);
             }
 
-            return Ok(sessionsWithSelfLinks);
+            return Ok(sessions);
         }
 
         [Route("{sessionDate:datetime}/{hour:int}", Name = "Hour")]
         public IHttpActionResult Get(DateTime sessionDate, int hour)
         {
-            var sessions = _sessionsRepository.GetAll().Where(s => s.StartTime.Date == sessionDate.Date && s.StartTime.Hour <= hour && s.EndTime.Hour >= hour);
+            var sessions =
+                _sessionsRepository.GetAll()
+                    .Where(
+                        s => s.StartTime.Date == sessionDate.Date && s.StartTime.Hour <= hour && s.EndTime.Hour >= hour)
+                    .ToList();
 
-            var sessionsWithSelfLinks = sessions.Select(AddSelfLinkTo);
+            sessions.ForEach(s => s.AddSelfLink(Url));
 
-            foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
+            foreach (var sessionWithSelfLink in sessions)
             {
-                sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
+                EnrichSessionWithLinks(sessionWithSelfLink);
             }
 
-            return Ok(sessionsWithSelfLinks);
+            return Ok(sessions);
         }
 
         [Route("tags/{name}", Name = "Tag")]
         public IHttpActionResult Get(string name)
         {
-            var allSessions = _sessionsRepository.GetAll();
+            var sessionsWithTag = _sessionsRepository.GetAll().Where(s => s.Tags.Any(t => t.Name == name)).ToList();
 
-            var sessionsWithTag = allSessions.Where(s => s.Tags.Any(t => t.Name == name));
+            sessionsWithTag.ForEach(s => s.AddSelfLink(Url));
 
-            var sessionsWithSelfLinks = sessionsWithTag.Select(AddSelfLinkTo);
-            
-
-            foreach (var sessionWithSelfLink in sessionsWithSelfLinks)
+            foreach (var sessionWithSelfLink in sessionsWithTag)
             {
-                sessionWithSelfLink.Speakers = sessionWithSelfLink.Speakers.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Tags = sessionWithSelfLink.Tags.Select(AddSelfLinkTo);
-                sessionWithSelfLink.Room = AddSelfLinkTo(sessionWithSelfLink.Room);
+                EnrichSessionWithLinks(sessionWithSelfLink);
             }
 
-            return Ok(sessionsWithSelfLinks);
+            return Ok(sessionsWithTag);
         }
 
-        private SessionModel AddSelfLinkTo(SessionModel session)
+        private void EnrichSessionWithLinks(SessionModel sessionWithSelfLink)
         {
-            var selfLink = ModelFactory.CreateLink(Url, "self", "Session", new {sessionId = session.Id});
-            session.Links = new List<LinkModel> {selfLink};
-
-            return session;
+            sessionWithSelfLink.Speakers.ForEach(s => s.AddSelfLink(Url));
+            sessionWithSelfLink.Tags.ForEach(t => t.AddSelfLink(Url));
+            sessionWithSelfLink.Room.AddSelfLink(Url);
         }
 
         private string GetDate(DateTime date)
@@ -131,30 +120,6 @@ namespace Cas2016.Api.Controllers
             session.Links.Add(hourLink);
 
             return session;
-        }
-
-        private MinimalSpeakerModel AddSelfLinkTo(MinimalSpeakerModel speaker)
-        {
-            var selfLink = ModelFactory.CreateLink(Url, "self", "Speaker", new { speakerId = speaker.Id });
-            speaker.Links = new List<LinkModel> { selfLink };
-
-            return speaker;
-        }
-
-        private TagModel AddSelfLinkTo(TagModel tag)
-        {
-            var selfLink = ModelFactory.CreateLink(Url, "self", "Tag", new { name = tag.Name });
-            tag.Links = new List<LinkModel> { selfLink };
-
-            return tag;
-        }
-
-        private RoomModel AddSelfLinkTo(RoomModel room)
-        {
-            var selfLink = ModelFactory.CreateLink(Url, "self", "Room", new { roomId = room.Id });
-            room.Links = new List<LinkModel> { selfLink };
-
-            return room;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Cas2016.Api.Tests.Builders
             return this;
         }
 
-        public SessionsControllerBuilder Returning(IEnumerable<SessionModel> sessionsReturnedByRepo)
+        public SessionsControllerBuilder Returning(List<SessionModel> sessionsReturnedByRepo)
         {
             _sessionRepository.Setup(r => r.GetAll()).Returns(sessionsReturnedByRepo);
             _sessionRepository.Setup(r => r.Get(It.IsAny<int>()))

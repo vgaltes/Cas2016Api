@@ -20,14 +20,14 @@ namespace Cas2016.Api.Tests
         {
             const int numberOfSessions = 5;
 
-            var sessionsReturnedByRepo = new Fixture().CreateMany<SessionModel>(numberOfSessions);
+            var sessionsReturnedByRepo = new Fixture().CreateMany<SessionModel>(numberOfSessions).ToList();
 
             var sessionsController = new SessionsControllerBuilder().Returning(sessionsReturnedByRepo).Build();
 
             var response = sessionsController.Get();
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>) response;
+                (OkNegotiatedContentResult<List<SessionModel>>) response;
 
             okResult.Content.Should().HaveCount(numberOfSessions);
             okResult.Content.ShouldBeEquivalentTo(sessionsReturnedByRepo);
@@ -39,12 +39,12 @@ namespace Cas2016.Api.Tests
             const int sessionId = 1;
 
             var sessionReturnedByRepo =
-                new Fixture().Build<SessionModel>().Without(s => s.Links).With(s => s.Id, 1).Create();
+                new Fixture().Build<SessionModel>().With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1).Create();
 
             var urlHelper = new Mock<UrlHelper>();
 
             var sessionsController =
-                new SessionsControllerBuilder().With(urlHelper).Returning(new[] {sessionReturnedByRepo}).Build();
+                new SessionsControllerBuilder().With(urlHelper).Returning(new[] {sessionReturnedByRepo}.ToList()).Build();
 
 
             var response = sessionsController.Get(sessionId);
@@ -62,7 +62,7 @@ namespace Cas2016.Api.Tests
         {
             const int numberOfSessions = 5;
 
-            var sessionsReturnedByRepo = new Fixture().CreateMany<SessionModel>(numberOfSessions);
+            var sessionsReturnedByRepo = new Fixture().CreateMany<SessionModel>(numberOfSessions).ToList();
             var urlHelper = new Mock<UrlHelper>();
 
             var sessionsController = new SessionsControllerBuilder()
@@ -73,7 +73,7 @@ namespace Cas2016.Api.Tests
             var response = sessionsController.Get();
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>) response;
+                (OkNegotiatedContentResult<List<SessionModel>>) response;
 
             okResult.Content.All(s => s.Links.Any(l => l.Rel == "self")).Should().BeTrue();
             okResult.Content.All(s =>
@@ -92,15 +92,16 @@ namespace Cas2016.Api.Tests
             const int speakerId = 1;
 
             var author = new Fixture().Build<MinimalSpeakerModel>()
-                .Without(s => s.Links)
+                .With(s => s.Links, new List<LinkModel>())
                 .With(s => s.Id, speakerId)
                 .Create();
 
             var sessionsReturnedByRepo = new Fixture()
                 .Build<SessionModel>()
-                .Without(s => s.Links).With(s => s.Id, 1)
-                .With(s => s.Speakers, new[] { author })
-                .CreateMany(numberOfSessions);
+                .With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1)
+                .With(s => s.Speakers, new[] { author }.ToList())
+                .CreateMany(numberOfSessions)
+                .ToList();
 
             var urlHelper = new Mock<UrlHelper>();
 
@@ -110,7 +111,7 @@ namespace Cas2016.Api.Tests
             var response = sessionsController.Get();
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+                (OkNegotiatedContentResult<List<SessionModel>>)response;
 
             okResult.Content.All(s => s.Speakers.Count() == 1).Should().BeTrue();
 
@@ -126,16 +127,17 @@ namespace Cas2016.Api.Tests
             const int speakerId = 1;
 
             var author = new Fixture().Build<MinimalSpeakerModel>()
-                .Without(s => s.Links)
+                .With(s => s.Links, new List<LinkModel>())
                 .With(s => s.Id, speakerId)
                 .Create();
 
             var sessionsReturnedByRepo = new Fixture()
                 .Build<SessionModel>()
-                .Without(s => s.Links).With(s => s.Id, 1)
-                .With(s => s.Speakers, new[] { author })
+                .With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1)
+                .With(s => s.Speakers, new[] { author }.ToList())
                 .With(s => s.StartTime, DateTime.Now)
-                .CreateMany(numberOfSessions);
+                .CreateMany(numberOfSessions)
+                .ToList();
 
             var urlHelper = new Mock<UrlHelper>();
 
@@ -145,7 +147,7 @@ namespace Cas2016.Api.Tests
             var response = sessionsController.Get(DateTime.Today);
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+                (OkNegotiatedContentResult<List<SessionModel>>)response;
 
             okResult.Content.All(s => s.Speakers.Count() == 1).Should().BeTrue();
 
@@ -161,20 +163,20 @@ namespace Cas2016.Api.Tests
             const int speakerId = 1;
 
             var author = new Fixture().Build<MinimalSpeakerModel>()
-                .Without(s => s.Links)
+                .With(s => s.Links, new List<LinkModel>())
                 .With(s => s.Id, speakerId)
                 .Create();
 
             var sessionReturnedByRepo =
                 new Fixture().Build<SessionModel>()
-                .Without(s => s.Links).With(s => s.Id, 1)
-                .With(s => s.Speakers, new [] {author})
+                .With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1)
+                .With(s => s.Speakers, new [] {author}.ToList())
                 .Create();
 
             var urlHelper = new Mock<UrlHelper>();
 
             var sessionsController =
-                new SessionsControllerBuilder().With(urlHelper).Returning(new[] { sessionReturnedByRepo }).Build();
+                new SessionsControllerBuilder().With(urlHelper).Returning(new[] { sessionReturnedByRepo }.ToList()).Build();
 
             var response = sessionsController.Get(sessionId);
 
@@ -194,20 +196,22 @@ namespace Cas2016.Api.Tests
 
             var sessionsOfToday = new Fixture().Build<SessionModel>()
                 .With(s => s.StartTime, DateTime.Now)
-                .CreateMany(todaySessionCount);
+                .CreateMany(todaySessionCount)
+                .ToList();
 
             var sessionsOfTomorrow = new Fixture().Build<SessionModel>()
                 .With(s => s.StartTime, DateTime.Now.AddDays(1))
-                .CreateMany(tomorrowSessionCount);
+                .CreateMany(tomorrowSessionCount)
+                .ToList();
 
             var sessionsController = new SessionsControllerBuilder()
-                .Returning(sessionsOfToday.Union(sessionsOfTomorrow))
+                .Returning(sessionsOfToday.Union(sessionsOfTomorrow).ToList())
                 .Build();
 
             var response = sessionsController.Get(DateTime.Now);
 
 
-            var okResult = (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+            var okResult = (OkNegotiatedContentResult<List<SessionModel>>)response;
 
             okResult.Content.Should().HaveCount(todaySessionCount);
         }
@@ -220,7 +224,8 @@ namespace Cas2016.Api.Tests
             var sessionsReturnedByRepo =
                 new Fixture().Build<SessionModel>()
                 .With(s => s.StartTime, DateTime.Now)
-                .CreateMany(numberOfSessions);
+                .CreateMany(numberOfSessions)
+                .ToList();
 
             var urlHelper = new Mock<UrlHelper>();
 
@@ -232,7 +237,7 @@ namespace Cas2016.Api.Tests
             var response = sessionsController.Get(DateTime.Now);
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+                (OkNegotiatedContentResult<List<SessionModel>>)response;
 
             okResult.Content.All(s => s.Links.Any(l => l.Rel == "self")).Should().BeTrue();
             okResult.Content.All(s =>
@@ -257,9 +262,10 @@ namespace Cas2016.Api.Tests
 
             var sessionsReturnedByRepo = new Fixture()
                 .Build<SessionModel>()
-                .Without(s => s.Links).With(s => s.Id, 1)
-                .With(s => s.Tags, new[] { tag })
-                .CreateMany(numberOfSessions);
+                .With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1)
+                .With(s => s.Tags, new[] { tag }.ToList())
+                .CreateMany(numberOfSessions)
+                .ToList();
 
             var urlHelper = new Mock<UrlHelper>();
 
@@ -269,7 +275,7 @@ namespace Cas2016.Api.Tests
             var response = sessionsController.Get();
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+                (OkNegotiatedContentResult<List<SessionModel>>)response;
 
             okResult.Content.All(s => s.Tags.Count() == 1).Should().BeTrue();
 
@@ -291,10 +297,11 @@ namespace Cas2016.Api.Tests
 
             var sessionsReturnedByRepo = new Fixture()
                 .Build<SessionModel>()
-                .Without(s => s.Links).With(s => s.Id, 1)
-                .With(s => s.Tags, new[] { tag })
+                .With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1)
+                .With(s => s.Tags, new[] { tag }.ToList())
                 .With(s => s.StartTime, DateTime.Now)
-                .CreateMany(numberOfSessions);
+                .CreateMany(numberOfSessions)
+                .ToList();
 
             var urlHelper = new Mock<UrlHelper>();
 
@@ -304,7 +311,7 @@ namespace Cas2016.Api.Tests
             var response = sessionsController.Get(DateTime.Today);
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+                (OkNegotiatedContentResult<List<SessionModel>>)response;
 
             okResult.Content.All(s => s.Tags.Count() == 1).Should().BeTrue();
 
@@ -326,14 +333,14 @@ namespace Cas2016.Api.Tests
 
             var sessionReturnedByRepo =
                 new Fixture().Build<SessionModel>()
-                .Without(s => s.Links).With(s => s.Id, 1)
-                .With(s => s.Tags, new[] { tag })
+                .With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1)
+                .With(s => s.Tags, new[] { tag }.ToList())
                 .Create();
 
             var urlHelper = new Mock<UrlHelper>();
 
             var sessionsController =
-                new SessionsControllerBuilder().With(urlHelper).Returning(new[] { sessionReturnedByRepo }).Build();
+                new SessionsControllerBuilder().With(urlHelper).Returning(new[] { sessionReturnedByRepo }.ToList()).Build();
 
             var response = sessionsController.Get(sessionId);
 
@@ -352,8 +359,9 @@ namespace Cas2016.Api.Tests
 
             var sessionsReturnedByRepo = new Fixture()
                 .Build<SessionModel>()
-                .Without(s => s.Links).With(s => s.Id, 1)
-                .CreateMany(numberOfSessions);
+                .With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1)
+                .CreateMany(numberOfSessions)
+                .ToList();
 
             var sessionsController = new SessionsControllerBuilder()
                 .Returning(sessionsReturnedByRepo).Build();
@@ -361,7 +369,7 @@ namespace Cas2016.Api.Tests
             var response = sessionsController.Get(sessionsReturnedByRepo.First().Tags.First().Name);
 
             var okResult =
-                (OkNegotiatedContentResult<IEnumerable<SessionModel>>)response;
+                (OkNegotiatedContentResult<List<SessionModel>>)response;
 
             okResult.Content.Should().HaveCount(1);
 

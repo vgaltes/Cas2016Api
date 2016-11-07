@@ -38,7 +38,7 @@ namespace Cas2016.Api.Tests
             const int speakerId = 1;
 
             var speakerReturnedByRepo =
-                new Fixture().Build<SpeakerModel>().Without(s => s.Links).With(s => s.Id, 1).Create();
+                new Fixture().Build<SpeakerModel>().With(s => s.Links, new List<LinkModel>()).With(s => s.Id, 1).Create();
 
             var urlHelper = new Mock<UrlHelper>();
 

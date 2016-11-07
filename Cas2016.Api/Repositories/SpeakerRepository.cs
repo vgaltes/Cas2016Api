@@ -88,7 +88,8 @@ namespace Cas2016.Api.Repositories
                 Biography = reader.GetString(6),
                 Image = reader.GetString(7),
                 City = reader.GetString(8),
-                Country = reader.GetString(9)
+                Country = reader.GetString(9),
+                Links = new List<LinkModel>()
             };
             return speaker;
         }
@@ -115,7 +116,8 @@ namespace Cas2016.Api.Repositories
                 sessions.Add(new MinimalSessionModel
                 {
                     Id = sessionReader.GetInt32(0),
-                    Title = sessionReader.GetString(1)
+                    Title = sessionReader.GetString(1),
+                    Links = new List<LinkModel>()
                 });
             }
             sessionReader.Close();

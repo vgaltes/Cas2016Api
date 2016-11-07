@@ -5,7 +5,7 @@ namespace Cas2016.Api.Repositories
 {
     public interface ISessionRepository
     {
-        IEnumerable<SessionModel> GetAll();
+        List<SessionModel> GetAll();
         SessionModel Get(int sessionId);
     }
 }

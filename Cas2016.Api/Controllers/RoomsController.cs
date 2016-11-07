@@ -23,17 +23,17 @@ namespace Cas2016.Api.Controllers
         {
             var rooms = _roomRepository.GetAll();
 
-            var roomsWithSelfLink = rooms.Select(AddSelfLinkTo);
+            rooms.ForEach(r => r.AddSelfLink(Url));
 
             var sessions = _sessionRepository.GetAll();
 
-            foreach (var room in roomsWithSelfLink)
+            foreach (var room in rooms)
             {
                 room.Sessions = sessions.Where(s => s.Room.Id == room.Id).Select(ConvertToMinimalSessionModel);
                 room.Sessions = room.Sessions.Select(AddSelfLinkTo);
             }
 
-            return Ok(roomsWithSelfLink);
+            return Ok(rooms);
         }
 
         [Route("{roomId}", Name = "Room")]
