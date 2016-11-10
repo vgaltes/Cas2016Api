@@ -79,6 +79,28 @@ namespace Cas2016.Api.Controllers
             return Ok(sessions);
         }
 
+        [Route("{sessionDate:datetime}/{hour:int}/{room:int}")]
+        public IHttpActionResult Get(DateTime sessionDate, int hour, int room)
+        {
+            var sessions =
+                _sessionsRepository.GetAll()
+                    .Where(
+                        s => s.Room.Id == room 
+                            && s.StartTime.Date == sessionDate.Date 
+                            && s.StartTime.Hour <= hour 
+                            && s.EndTime.Hour >= hour)
+                    .ToList();
+
+            sessions.ForEach(s => s.AddSelfLink(Url));
+
+            foreach (var sessionWithSelfLink in sessions)
+            {
+                EnrichSessionWithLinks(sessionWithSelfLink);
+            }
+
+            return Ok(sessions);
+        }
+
         [Route("tags/{name}", Name = "Tag")]
         public IHttpActionResult Get(string name)
         {

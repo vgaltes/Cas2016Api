@@ -25,6 +25,8 @@ let getValue o prefix =
     | None -> ""
 
 for item in Simple.GetSamples() do 
+    printfn "%s" item.Email
+
     let author = 
         new dbSchema.ServiceTypes.Speakers(
             FirstName = item.Name,
