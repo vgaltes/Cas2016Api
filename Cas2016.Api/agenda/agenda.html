@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <script src="./js/jquery-3.1.1.min.js"></script>
+        <script src="./js/tether.min.js"></script>
+        <link rel="stylesheet" href="./css/tether.min.css" type="text/css">
+        <link href="./css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="./js/bootstrap.js"></script>
+        <script src="./js/vue.js"></script>
+        
+    </head>
+    <body>
+
+    <ul class="nav nav-inline">
+        <li class="nav-item"><a class="active" href="#thursday" data-toggle="tab">Jueves</a></li>
+        <li class="nav-item"><a href="#friday" data-toggle="tab">Viernes</a></li>
+    </ul>
+    <br />
+    <div class="tab-content" id="agenda">
+        <div class="tab-pane active" id="thursday">
+            <div class="container agendaThursday">
+                <agenda-day url="http://cas2016api.azurewebsites.net/sessions/2016-12-01"> </agenda-day>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="friday">
+            <div class="container agendaFriday">
+                <agenda-day url="http://cas2016api.azurewebsites.net/sessions/2016-12-02"> </agenda-day>
+            </div>
+        </div>
+    </div>
+        
+    <script src="./js/agenda.js"></script>
+    </body>
+</html>
