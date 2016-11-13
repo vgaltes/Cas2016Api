@@ -60,25 +60,25 @@ Vue.component('agenda-day', {
     },
     props: ['url'],
     template: '<div> \
-            <div class="row" v-for="slot in slots"> \
-            <div class="col-xs-2 col-sm-2"> \
+            <div class="row is-flex" v-for="slot in slots"> \
+            <div class="col-md-2"> \
                 {{ formatDate(slot.startTime) }} - {{ formatDate(slot.endTime) }} \
             </div> \
-            <div class="panel panel-default col-xs-2 col-sm-2" v-for="session in slot.sessions" > \
+            <div class="col-md-2" v-for="session in slot.sessions" > \
                 <div v-if="session.length === 1"> \
                     <div class="slot_container full"> \
-                        <div class="panel-heading">{{ session[0].title }}</div> \
-                        <div class="panel-body">{{ formatSpeakers(session[0].speakers) }}</div> \
+                        <div class="talk-title">{{ session[0].title }}</div> \
+                        <div class="talk-speakers">{{ formatSpeakers(session[0].speakers) }}</div> \
                     </div> \
                 </div> \
                 <div v-else> \
                     <div class="slot_container half"> \
-                        <div class="panel-heading">{{ session[0].title }}</div> \
-                        <div class="panel-body">{{ formatSpeakers(session[0].speakers) }}</div> \
+                        <div class="talk-title">{{ session[0].title }}</div> \
+                        <div class="talk-speakers">{{ formatSpeakers(session[0].speakers) }}</div> \
                     </div> \
                     <div class="slot_container half"> \
-                        <div class="panel-heading">{{ session[1].title }}</div> \
-                        <div class="panel-body">{{ formatSpeakers(session[1].speakers) }}</div> \
+                        <div class="talk-title">{{ session[1].title }}</div> \
+                        <div class="talk-speakers">{{ formatSpeakers(session[1].speakers) }}</div> \
                     </div> \
                 </div> \
             </div> \
