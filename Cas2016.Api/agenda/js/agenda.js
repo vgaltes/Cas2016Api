@@ -52,6 +52,8 @@ function getSpeakers(rawSpeakers){
     return speakers;
 }
 
+var eventHub = new Vue();
+
 Vue.component('agenda-day', {
     data: function(){
         return {
@@ -66,7 +68,7 @@ Vue.component('agenda-day', {
             </div> \
             <div class="col-md-2" v-for="session in slot.sessions" > \
                 <div v-if="session.length === 1"> \
-                    <div class="slot_container full"> \
+                    <div class="slot_container full" @click="openDetails(session[0])"> \
                         <div class="talk-title">{{ session[0].title }}</div> \
                         <div class="talk-speakers">{{ formatSpeakers(session[0].speakers) }}</div> \
                     </div> \
@@ -84,10 +86,13 @@ Vue.component('agenda-day', {
             </div> \
             </div> \
         </div>',
-    created: function(){
-        this.updateData()
+    created: function() {
+        this.updateData();
     },
     methods: {
+        openDetails: function(session) {
+            eventHub.$emit('session-modal:open', session);
+        },
         updateData: function(){
             var apiSessions = [];
             var slots = [];
@@ -100,7 +105,8 @@ Vue.component('agenda-day', {
                         startTime: rawSession.startTime,
                         endTime: rawSession.endTime,
                         duration: rawSession.duration,
-                        room: rawSession.room.id
+                        room: rawSession.room.id,
+                        description: rawSession.description
                     };
 
                     apiSessions.push(session);
@@ -157,5 +163,22 @@ Vue.component('agenda-day', {
 });
 
 var agenda = new Vue({
-    el: '#agenda'
+    el: '#agenda',
+    data: {
+        sessionDetails: null
+    },
+    methods: {
+        showSessionDetails : function(session) {
+            console.log('Event received: ' + session);
+            this.sessionDetails = session;
+            $("#session-modal").modal('toggle');
+        }
+    },
+    created: function () {
+        eventHub.$on('session-modal:open', this.showSessionDetails);
+    },
+
+    beforeDestroy: function () {
+        eventHub.$off('session-modal:open', this.showSessionDetails);
+    }
 });

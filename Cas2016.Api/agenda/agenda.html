@@ -1,22 +1,46 @@
 <html>
-    <head>
-        <script src="./js/jquery-3.1.1.min.js"></script>
-        <script src="./js/tether.min.js"></script>
-        <link rel="stylesheet" href="./css/tether.min.css" type="text/css">
-        <link href="./css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <link href="./css/agenda.css" rel="stylesheet" type="text/css"/>
-        <script src="./js/bootstrap.js"></script>
-        <script src="./js/vue.js"></script>
-        
-    </head>
-    <body>
+<head>
+    <script src="./js/jquery-3.1.1.min.js"></script>
+    <script src="./js/tether.min.js"></script>
+    <link rel="stylesheet" href="./css/tether.min.css" type="text/css">
+    <link href="./css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/agenda.css" rel="stylesheet" type="text/css"/>
+    <script src="./js/bootstrap.js"></script>
+    <script src="./js/vue.js"></script>
+
+</head>
+<body>
+
+<div id="agenda">
+    <div class="modal fade" id="session-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div v-if="sessionDetails" class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">{{ sessionDetails.title }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ sessionDetails.description }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <ul class="nav nav-inline">
-        <li class="nav-item"><a class="active" href="#thursday" data-toggle="tab">Jueves</a></li>
-        <li class="nav-item"><a href="#friday" data-toggle="tab">Viernes</a></li>
+        <li class="nav-item">
+            <a class="active" href="#thursday" data-toggle="tab">Jueves</a>
+        </li>
+        <li class="nav-item">
+            <a href="#friday" data-toggle="tab">Viernes</a>
+        </li>
     </ul>
-    <br />
-    <div class="tab-content" id="agenda">
+    <br/>
+    <div class="tab-content">
         <div class="tab-pane active" id="thursday">
             <div class="container agendaThursday">
                 <agenda-day url="http://cas2016api.azurewebsites.net/sessions/2016-12-01"> </agenda-day>
@@ -29,7 +53,7 @@
             </div>
         </div>
     </div>
-        
-    <script src="./js/agenda.js"></script>
-    </body>
+</div>
+<script src="./js/agenda.js"></script>
+</body>
 </html>
