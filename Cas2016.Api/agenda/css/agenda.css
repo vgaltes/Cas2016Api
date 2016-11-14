@@ -43,3 +43,7 @@ div.row {
 .auditorio {
     color: red;
 }
+
+.center {
+    text-align: center;
+}

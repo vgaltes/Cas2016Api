@@ -63,8 +63,8 @@ Vue.component('session',
     },
     props: ['info'],
     template: '<div v-if="info" class="slot_container full" @click="openDetails(info)"> \
-                        <p class="talk-title" v-bind:style="{color: activeColor}">{{ info.title }}</p> \
-                        <p class="talk-speakers">{{ formatSpeakers(info.speakers) }}</p> \
+                        <p class="talk-title center" v-bind:style="{color: activeColor}">{{ info.title }}</p> \
+                        <p class="talk-speakers center">{{ formatSpeakers(info.speakers) }}</p> \
                     </div>',
     methods: {
         openDetails: function(session) {
@@ -109,28 +109,36 @@ Vue.component('agenda-day', {
     },
     props: ['url'],
     template: '<div> \
+            <div class="row">\
+                <div class="col-md-2"> </div> \
+                <div class="col-md-2 center talk-title">Auditorio</div> \
+                <div class="col-md-2 center talk-title">Gasteiz</div> \
+                <div class="col-md-2 center talk-title">Avenida</div> \
+                <div class="col-md-2 center talk-title">Micaela Portilla</div> \
+                <div class="col-md-2 center talk-title">La Florida</div> \
+            </div>\
             <div class="row is-flex" v-for="slot in slots"> \
-            <div class="col-md-2"> \
-                {{ formatDate(slot.startTime) }} - {{ formatDate(slot.endTime) }} \
-            </div> \
-            <div v-if="slot.sessions[0].isPlenary == 1"> \
-                <div class="col-md-10">{{ slot.sessions[0].title }} </div> \
-            </div> \
-            <div v-else> \
-            <div class="col-md-2" v-for="(s, index) in slot.sessions" > \
-                <div v-if="s.length === 1"> \
-                    <session :info="s[0]"></session> \
+                <div class="col-md-2"> \
+                    {{ formatDate(slot.startTime) }} - {{ formatDate(slot.endTime) }} \
                 </div> \
-                <div v-else> \
-                    <div class="slot_container half"> \
+                <div class="col-md-10" v-if="slot.sessions[1][0] && slot.sessions[1][0].isPlenary === true"> \
+                    <!-- <div class="talk-title center">{{ slot.sessions[1][0].title }} </div> \
+                    <div class="talk-speakers center">{{ formatSpeakers(slot.sessions[1][0].speakers) }} </div> --> \
+                    <session :info="slot.sessions[1][0]"> </session> \
+                </div> \
+                <div v-else class="col-md-2" v-for="(s, index) in slot.sessions" > \
+                    <div v-if="s.length === 1"> \
                         <session :info="s[0]"></session> \
                     </div> \
-                    <div class="slot_container half"> \
-                        <session :info="s[1]"></session> \
+                    <div v-else> \
+                        <div class="slot_container half"> \
+                            <session :info="s[0]"></session> \
+                        </div> \
+                        <div class="slot_container half"> \
+                            <session :info="s[1]"></session> \
+                        </div> \
                     </div> \
                 </div> \
-            </div> \
-            </div> \
             </div> \
         </div>',
     created: function() {
@@ -139,6 +147,12 @@ Vue.component('agenda-day', {
     methods: {
         openDetails: function(session) {
             eventHub.$emit('session-modal:open', session);
+        },
+        formatSpeakers: function (speakers) {
+            if (!speakers) return "No Speaker";
+
+            var speakersName = speakers.map(function (s) { return s.name });
+            return speakersName.join();
         },
         updateData: function(){
             var apiSessions = [];
@@ -161,7 +175,7 @@ Vue.component('agenda-day', {
                 });
 
                 var normalSessions = apiSessions.filter(function(session){
-                    return session.duration === 45;
+                    return session.duration === 45 || session.isPlenary;
                 });
 
                 var sessionsGroupedByStartTimes = groupBy("startTime")(normalSessions);
@@ -203,7 +217,7 @@ Vue.component('agenda-day', {
                 $.each(slots, function(i, slot){
                     slot.sessions.sort(function(a, b){return a.room - b.room});
                     slot.sessions = groupBy("room")(slot.sessions);
-                    //rellenar huecos
+                    //rellenar huecos si no es penaria
                     var totalRooms = [1, 2, 3, 4, 5];
                     var rooms = [];
                     $.each(slot.sessions,
@@ -211,22 +225,25 @@ Vue.component('agenda-day', {
                             rooms.push(s[0].room);
                         });
                     var emptyRooms = diff(totalRooms, rooms);
-                    $.each(emptyRooms,
-                        function(i, r) {
-                            insert(slot.sessions,
-                                r,
-                                {
-                                    id: 1,
-                                    title: 'test',
-                                    speakers: [],
-                                    startTime: '',
-                                    endTime: '',
-                                    duration: 45,
-                                    room: r,
-                                    description: 'test description'
-                                });
+                    if (emptyRooms < totalRooms.length - 1) {
+                        $.each(emptyRooms,
+                            function(i, r) {
+                                insert(slot.sessions,
+                                    r,
+                                    {
+                                        id: 1,
+                                        title: 'test',
+                                        speakers: [],
+                                        startTime: '',
+                                        endTime: '',
+                                        duration: 45,
+                                        room: r,
+                                        description: 'test description',
+                                        isPlenary: false
+                                    });
 
-                        });
+                            });
+                    }
                 });
             });
 
