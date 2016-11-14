@@ -95,7 +95,7 @@ Vue.component('session',
                 this.activeColor = "purple";
                 break;
             case 5:
-                this.activeColor = "yellow";
+                this.activeColor = "green";
                 break;
         }
     }
