@@ -240,6 +240,7 @@
     <Content Include="Images\isidro_lopez.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\joserra_diaz.png" />
     <Content Include="Images\jose_beas.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -258,6 +259,7 @@
     <Content Include="Images\modesto_sanjuan.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\phillip_peter.jpg" />
     <Content Include="Images\raquel_lainde.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -273,6 +275,7 @@
     <Content Include="Images\silvia_calvet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\xabi_saez.jpg" />
     <Content Include="Images\xavier_albaladejo.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
