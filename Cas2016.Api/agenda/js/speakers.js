@@ -1,19 +1,10 @@
 
 
 Vue.component('speaker', {
-    //data: function(){
-    //    return {
-    //        speaker: null
-    //    }
-    //},
-    methods: {
-      getSpeakerAnchor: function(id) {
-          return "#" + id;
-      }  
-    },
     props: ['speakerData'],
-    template: '<div class="row" :id=getSpeakerAnchor(speakerData.id)> \
-            <div class="col-md-3 limit"> \
+    template: '<div class="row"> \
+                <a :name=speakerData.id></a>\
+            <div :id=speakerData.id class="col-md-3 limit"> \
                 <img :src="speakerData.image"></img> \
             </div> \
             <div class="col-md-8" > \

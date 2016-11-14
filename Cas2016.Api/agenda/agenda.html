@@ -27,8 +27,7 @@
                     </div>
                     <div id="session-speakers">
                         <div v-for="speaker in speakers">
-                            <b>{{ speaker.name }}</b>
-                            <p>{{ speaker.biography }}</p>
+                            <p><a :href=getSpeakerLink(speaker.id)>{{ speaker.name }}</a></p>
                         </div>
                     </div>
                 </div>

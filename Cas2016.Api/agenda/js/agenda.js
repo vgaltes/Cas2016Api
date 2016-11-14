@@ -173,15 +173,14 @@ var agenda = new Vue({
             var app = this;
             return $.getJSON("http://cas2016api.azurewebsites.net/speakers/" + speakerId, function (result) {
                 var speaker = {
-                    name: result.name,
-                    biography: result.biography
+                    id: result.id,
+                    name: result.name
                 };
 
                 app.speakers.push(speaker);
             });
         },
         showSessionDetails : function(session) {
-            console.log('Event received: ' + session);
             this.sessionDetails = session;
             this.speakers = [];
             var app = this;
@@ -194,7 +193,9 @@ var agenda = new Vue({
             $.when.apply($, requests).done(function (schemas) {
                 $("#session-modal").modal('toggle');
             });
-            
+        },
+        getSpeakerLink: function(speakerId) {
+            return "./speakers.html#" + speakerId;
         }
     },
     created: function () {
