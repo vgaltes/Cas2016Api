@@ -165,13 +165,36 @@ Vue.component('agenda-day', {
 var agenda = new Vue({
     el: '#agenda',
     data: {
-        sessionDetails: null
+        sessionDetails: null,
+        speakers:[]
     },
     methods: {
+        getSpeaker: function (speakerId) {
+            var app = this;
+            return $.getJSON("http://cas2016api.azurewebsites.net/speakers/" + speakerId, function (result) {
+                var speaker = {
+                    name: result.name,
+                    biography: result.biography
+                };
+
+                app.speakers.push(speaker);
+            });
+        },
         showSessionDetails : function(session) {
             console.log('Event received: ' + session);
             this.sessionDetails = session;
-            $("#session-modal").modal('toggle');
+            this.speakers = [];
+            var app = this;
+
+            var requests = [];
+            $.each(this.sessionDetails.speakers, function(i, speaker){
+                requests.push(app.getSpeaker(speaker.id));
+            });
+
+            $.when.apply($, requests).done(function (schemas) {
+                $("#session-modal").modal('toggle');
+            });
+            
         }
     },
     created: function () {

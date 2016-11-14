@@ -22,7 +22,15 @@
                     <h4 class="modal-title" id="myModalLabel">{{ sessionDetails.title }}</h4>
                 </div>
                 <div class="modal-body">
-                    {{ sessionDetails.description }}
+                    <div id="session-description">
+                        {{ sessionDetails.description }}
+                    </div>
+                    <div id="session-speakers">
+                        <div v-for="speaker in speakers">
+                            <b>{{ speaker.name }}</b>
+                            <p>{{ speaker.biography }}</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -26,6 +26,11 @@ div.row {
     border-top:0;
 }
 
+.limit img{
+    width: 100%;
+    height: 100%;
+}
+
 
 /* Base Stuff Ignore */
 /*body {
