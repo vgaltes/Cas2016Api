@@ -12,6 +12,7 @@ namespace Cas2016.Api.Models
         public List<MinimalSpeakerModel> Speakers { get; set; }
         public List<TagModel> Tags { get; set; }
         public RoomModel Room { get; set; }
+        public bool IsPlenary { get; set; }
     }
 
     

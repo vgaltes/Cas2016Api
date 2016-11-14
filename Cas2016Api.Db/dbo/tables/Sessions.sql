@@ -8,6 +8,7 @@
     [EndTime] DATETIME2 NULL, 
     [Tags] NVARCHAR(MAX) NULL, 
     [Room] INT NOT NULL,
-	CONSTRAINT [PK_Session] PRIMARY KEY CLUSTERED ([Id] ASC),
+	[IsPlenary] BIT NULL, 
+    CONSTRAINT [PK_Session] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_Session_Room] FOREIGN KEY ([Room]) REFERENCES [Rooms] ([Id])
 )

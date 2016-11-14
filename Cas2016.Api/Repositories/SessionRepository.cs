@@ -97,8 +97,9 @@ namespace Cas2016.Api.Repositories
                 Duration = reader.GetInt32(3),
                 StartTime = reader.GetDateTime(4),
                 EndTime = reader.GetDateTime(5),
-                Tags = GetTagsFrom(reader.GetString(6)),
-                Room = _roomRepository.Get(reader.GetInt32(7))
+                Tags = reader.IsDBNull(6) ? new List<TagModel>() : GetTagsFrom(reader.GetString(6)),
+                Room = _roomRepository.Get(reader.GetInt32(7)),
+                IsPlenary = reader.GetBoolean(8)
             };
             return session;
         }

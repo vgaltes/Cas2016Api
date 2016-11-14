@@ -113,6 +113,10 @@ Vue.component('agenda-day', {
             <div class="col-md-2"> \
                 {{ formatDate(slot.startTime) }} - {{ formatDate(slot.endTime) }} \
             </div> \
+            <div v-if="slot.sessions[0].isPlenary == 1"> \
+                <div class="col-md-10">{{ slot.sessions[0].title }} </div> \
+            </div> \
+            <div v-else> \
             <div class="col-md-2" v-for="(s, index) in slot.sessions" > \
                 <div v-if="s.length === 1"> \
                     <session :info="s[0]"></session> \
@@ -125,6 +129,7 @@ Vue.component('agenda-day', {
                         <session :info="s[1]"></session> \
                     </div> \
                 </div> \
+            </div> \
             </div> \
             </div> \
         </div>',
@@ -148,7 +153,8 @@ Vue.component('agenda-day', {
                         endTime: rawSession.endTime,
                         duration: rawSession.duration,
                         room: rawSession.room.id,
-                        description: rawSession.description
+                        description: rawSession.description,
+                        isPlenary: rawSession.isPlenary
                     };
 
                     apiSessions.push(session);
