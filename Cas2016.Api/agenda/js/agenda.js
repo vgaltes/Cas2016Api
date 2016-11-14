@@ -54,6 +54,53 @@ function getSpeakers(rawSpeakers){
 
 var eventHub = new Vue();
 
+Vue.component('session',
+{
+    data: function() {
+        return {
+            activeColor: 'black'
+        }
+    },
+    props: ['info'],
+    template: '<div v-if="info" class="slot_container full" @click="openDetails(info)"> \
+                        <p class="talk-title" v-bind:style="{color: activeColor}">{{ info.title }}</p> \
+                        <p class="talk-speakers">{{ formatSpeakers(info.speakers) }}</p> \
+                    </div>',
+    methods: {
+        openDetails: function(session) {
+            eventHub.$emit('session-modal:open', session);
+        },
+        formatSpeakers: function (speakers) {
+            if (!speakers) return "No Speaker";
+
+            var speakersName = speakers.map(function (s) { return s.name });
+            return speakersName.join();
+        }
+    },
+    created: function () {
+        if (!this.info) return;
+
+        switch(this.info.room)
+        {
+            case 1:
+                this.activeColor = "red";
+                break;
+            case 2:
+                this.activeColor = "orange";
+                break;
+            case 3:
+                this.activeColor = "blue";
+                break;
+            case 4:
+                this.activeColor = "purple";
+                break;
+            case 5:
+                this.activeColor = "yellow";
+                break;
+        }
+    }
+});
+
 Vue.component('agenda-day', {
     data: function(){
         return {
@@ -66,21 +113,16 @@ Vue.component('agenda-day', {
             <div class="col-md-2"> \
                 {{ formatDate(slot.startTime) }} - {{ formatDate(slot.endTime) }} \
             </div> \
-            <div class="col-md-2" v-for="session in slot.sessions" > \
-                <div v-if="session.length === 1"> \
-                    <div class="slot_container full" @click="openDetails(session[0])"> \
-                        <div class="talk-title">{{ session[0].title }}</div> \
-                        <div class="talk-speakers">{{ formatSpeakers(session[0].speakers) }}</div> \
-                    </div> \
+            <div class="col-md-2" v-for="(s, index) in slot.sessions" > \
+                <div v-if="s.length === 1"> \
+                    <session :info="s[0]"></session> \
                 </div> \
                 <div v-else> \
                     <div class="slot_container half"> \
-                        <div class="talk-title">{{ session[0].title }}</div> \
-                        <div class="talk-speakers">{{ formatSpeakers(session[0].speakers) }}</div> \
+                        <session :info="s[0]"></session> \
                     </div> \
                     <div class="slot_container half"> \
-                        <div class="talk-title">{{ session[1].title }}</div> \
-                        <div class="talk-speakers">{{ formatSpeakers(session[1].speakers) }}</div> \
+                        <session :info="s[1]"></session> \
                     </div> \
                 </div> \
             </div> \
@@ -126,24 +168,59 @@ Vue.component('agenda-day', {
                     });
                 });
 
-                var selectSlot = function(session){
+                var selectSlots = function(session){
                     return slots.filter(function(slot){
                         return session.startTime === slot.startTime || session.endTime === slot.endTime;
-                    })[0];
+                    });
                 }
 
                 $.each(apiSessions, function(i, s){
-                    var slot = selectSlot(s);
-                    if ( slot )  {
-                        slot.sessions.push(s);
+                    var slots = selectSlots(s);
+                    if (slots) {
+                        $.each(slots,
+                            function(i, slot) {
+                                slot.sessions.push(s);
+                            });
                     }
                 });
 
                 slots.sort(function(a, b){return new Date(a.startTime) - new Date(b.startTime);});
 
+                var diff = function(a, b) {
+                    return a.filter(function(i) {return b.indexOf(i) < 0;});
+                };
+
+                var insert = function (list, index, item) {
+                    list[index] = item;
+                };
+
                 $.each(slots, function(i, slot){
                     slot.sessions.sort(function(a, b){return a.room - b.room});
                     slot.sessions = groupBy("room")(slot.sessions);
+                    //rellenar huecos
+                    var totalRooms = [1, 2, 3, 4, 5];
+                    var rooms = [];
+                    $.each(slot.sessions,
+                        function(i, s) {
+                            rooms.push(s[0].room);
+                        });
+                    var emptyRooms = diff(totalRooms, rooms);
+                    $.each(emptyRooms,
+                        function(i, r) {
+                            insert(slot.sessions,
+                                r,
+                                {
+                                    id: 1,
+                                    title: 'test',
+                                    speakers: [],
+                                    startTime: '',
+                                    endTime: '',
+                                    duration: 45,
+                                    room: r,
+                                    description: 'test description'
+                                });
+
+                        });
                 });
             });
 
@@ -151,13 +228,7 @@ Vue.component('agenda-day', {
         },
         formatDate: function(d){
             var date = new Date(d);
-            return date.getHours() + ":" + ( date.getMinutes() === 0 ? "00" : date.getMinutes() )
-        },
-        formatSpeakers: function (speakers) {
-            if (!speakers) return "No Speaker";
-
-            var speakersName = speakers.map(function (s) { return s.name });
-            return speakersName.join();
+            return date.getHours() + ":" + (date.getMinutes() === 0 ? "00" : date.getMinutes());
         }
     }
 });
