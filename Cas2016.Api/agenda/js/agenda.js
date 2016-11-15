@@ -83,19 +83,19 @@ Vue.component('session',
         switch(this.info.room)
         {
             case 1:
-                this.activeColor = "red";
+                this.activeColor = "#D52244";
                 break;
             case 2:
-                this.activeColor = "orange";
+                this.activeColor = "#EB5C32";
                 break;
             case 3:
-                this.activeColor = "blue";
+                this.activeColor = "#00B7D4";
                 break;
             case 4:
-                this.activeColor = "purple";
+                this.activeColor = "#0A8CAA";
                 break;
             case 5:
-                this.activeColor = "green";
+                this.activeColor = "#F59921";
                 break;
         }
     }

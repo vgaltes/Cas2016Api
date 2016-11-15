@@ -207,12 +207,14 @@
     <Content Include="Images\antonio-delatorre.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\candido_alcaide.png" />
     <Content Include="Images\carlos_montero.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\dani_latorre.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\dino_zafirakos.jpg" />
     <Content Include="Images\eduardo_ferro.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
