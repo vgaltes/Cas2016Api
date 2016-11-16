@@ -47,10 +47,61 @@ div.row {
     font-size: 0.9em;
 }
 
-.auditorio {
-    color: red;
-}
-
 .center {
     text-align: center;
+}
+
+.head-style2 {
+    
+}
+
+header.top-head {
+    background-color: rgb(255, 255, 255);
+}
+.top-head {
+    border-bottom: 1px #f7f7f7 solid;
+}
+
+.header-2 {
+    
+}
+
+.logo {
+
+}
+
+.clearfix {
+    float: none;
+    clear: both;
+}
+
+.top-head .header-container {
+    position: relative;
+    display: table;
+}
+
+
+@media (min-width: 768px) {
+    .header-container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .header-container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .header-container {
+        width: 1170px;
+    }
+}
+
+.header-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
