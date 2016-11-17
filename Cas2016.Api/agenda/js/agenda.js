@@ -171,7 +171,8 @@ Vue.component('agenda-day', {
                         isPlenary: rawSession.isPlenary
                     };
 
-                    apiSessions.push(session);
+                    if ( session.room < 6) // Change this and make room 6 available.
+                        apiSessions.push(session);
                 });
 
                 var normalSessions = apiSessions.filter(function(session){
