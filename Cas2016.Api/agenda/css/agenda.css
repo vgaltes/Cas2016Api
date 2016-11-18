@@ -84,6 +84,13 @@
     font-size: 2em;
 }
 
+.flag {
+    width: 20px;
+    height: 14px;
+    margin-left: 5px;
+    vertical-align: baseline;
+}
+
 @media (min-width: 410px){
     .slot-container.grid-col-small .grid-item, .slot-container.grid-col .grid-item {
         width: calc(50% - 14px);

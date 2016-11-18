@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web.UI;
 using Cas2016.Api.Models;
 
 namespace Cas2016.Api.Repositories
@@ -99,7 +100,8 @@ namespace Cas2016.Api.Repositories
                 EndTime = GetDateTimeUtc(reader, 5),
                 Tags = reader.IsDBNull(6) ? new List<TagModel>() : GetTagsFrom(reader.GetString(6)),
                 Room = _roomRepository.Get(reader.GetInt32(7)),
-                IsPlenary = reader.GetBoolean(8)
+                IsPlenary = reader.GetBoolean(8),
+                Language = reader.GetString(9)
             };
             return session;
         }

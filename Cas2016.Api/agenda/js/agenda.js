@@ -64,7 +64,7 @@ Vue.component('session',
     props: ['info'],
     template: '<div class="grid-item" @click="openDetails(info)"> \
                 <p class="talk-room" v-bind:style="{color: activeColor}" > {{ info.room.name }} <p> \
-                                <h4 class="talk-title" v-bind:style="{color: activeColor}">{{ info.title }}</h4> \
+                                <h4 class="talk-title" v-bind:style="{color: activeColor}">{{ info.title }}<img class="flag" :src="formatFlag()"></img></h4> \
                                 <p class="talk-speakers">{{ formatSpeakers(info.speakers) }}</p> \
                             </div>',
 
@@ -77,6 +77,9 @@ Vue.component('session',
 
             var speakersName = speakers.map(function (s) { return s.name });
             return speakersName.join();
+        },
+        formatFlag: function() {
+            return "../images/flag_" + this.info.language + ".jpg";
         }
     },
     created: function () {
@@ -146,7 +149,8 @@ Vue.component('agenda-day', {
                         duration: rawSession.duration,
                         room: { id: rawSession.room.id, name: rawSession.room.name },
                         description: rawSession.description,
-                        isPlenary: rawSession.isPlenary
+                        isPlenary: rawSession.isPlenary,
+                        language: rawSession.language
                     };
 
                     apiSessions.push(session);
@@ -193,10 +197,6 @@ Vue.component('agenda-day', {
             this.slots = slots;
         },
         formatDate: function (d) {
-           
-            //var date = new Date(d);
-            //return date.getHours() + ":" + (date.getMinutes() === 0 ? "00" : date.getMinutes());
-
             var tz1 = moment(d).tz("Europe/Madrid");
             return tz1.format("HH:mm");
         }

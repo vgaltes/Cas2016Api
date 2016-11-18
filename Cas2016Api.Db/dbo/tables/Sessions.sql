@@ -9,6 +9,7 @@
     [Tags] NVARCHAR(MAX) NULL, 
     [Room] INT NOT NULL,
 	[IsPlenary] BIT NULL, 
+	[Language] NVARCHAR(2) DEFAULT 'es',
     CONSTRAINT [PK_Session] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_Session_Room] FOREIGN KEY ([Room]) REFERENCES [Rooms] ([Id])
 )
