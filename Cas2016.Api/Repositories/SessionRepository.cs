@@ -95,8 +95,8 @@ namespace Cas2016.Api.Repositories
                 Title = reader.GetString(1),
                 Description = reader.GetString(2),
                 Duration = reader.GetInt32(3),
-                StartTime = reader.GetDateTime(4),
-                EndTime = reader.GetDateTime(5),
+                StartTime = GetDateTimeUtc( reader, 4),
+                EndTime = GetDateTimeUtc(reader, 5),
                 Tags = reader.IsDBNull(6) ? new List<TagModel>() : GetTagsFrom(reader.GetString(6)),
                 Room = _roomRepository.Get(reader.GetInt32(7)),
                 IsPlenary = reader.GetBoolean(8)
@@ -104,7 +104,13 @@ namespace Cas2016.Api.Repositories
             return session;
         }
 
-        private List<MinimalSpeakerModel> GetSpeakersFor(int sessionId, SqlConnection connection)
+        public static DateTime GetDateTimeUtc(SqlDataReader reader, int field)
+        {
+            DateTime unspecified = reader.GetDateTime(field);
+            return DateTime.SpecifyKind(unspecified, DateTimeKind.Utc);
+        }
+
+    private List<MinimalSpeakerModel> GetSpeakersFor(int sessionId, SqlConnection connection)
         {
             var speakersIdCommand =
                 new SqlCommand("SELECT SpeakerId from SessionsSpeakers " +
