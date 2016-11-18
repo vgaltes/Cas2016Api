@@ -192,7 +192,10 @@ Vue.component('agenda-day', {
 
             this.slots = slots;
         },
-        formatDate: function(d){
+        formatDate: function (d) {
+            var date = new Date(d);
+            return date.getHours() + ":" + (date.getMinutes() === 0 ? "00" : date.getMinutes());
+
             var tz5 = moment(d).utcOffset("+01:00");
             return tz5.format("HH:mm");
         }
