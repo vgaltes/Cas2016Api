@@ -153,7 +153,7 @@ Vue.component('agenda-day', {
                 });
 
                 var normalSessions = apiSessions.filter(function(session){
-                    return session.duration === 45;
+                    return session.duration === 45 || session.isPlenary;
                 });
 
                 var sessionsGroupedByStartTimes = groupBy("startTime")(normalSessions);
