@@ -194,11 +194,11 @@ Vue.component('agenda-day', {
         },
         formatDate: function (d) {
            
-            var date = new Date(d);
-            return date.getHours() + ":" + (date.getMinutes() === 0 ? "00" : date.getMinutes());
+            //var date = new Date(d);
+            //return date.getHours() + ":" + (date.getMinutes() === 0 ? "00" : date.getMinutes());
 
-            var tz5 = moment(d).utcOffset("+01:00");
-            return tz5.format("HH:mm");
+            var tz1 = moment(d).tz("Europe/Madrid");
+            return tz1.format("HH:mm");
         }
     }
 });
