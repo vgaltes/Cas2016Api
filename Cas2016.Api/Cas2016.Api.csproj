@@ -254,10 +254,10 @@
     <Content Include="Images\fernando_paris.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\flag_es.jpg">
+    <Content Include="Images\flag_en.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\flat_en.jpg">
+    <Content Include="Images\flag_es.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\florentino_romero.jpg">

@@ -28,6 +28,7 @@ var speakers = new Vue({
     },
     created: function () {
         var speakers = [];
+        var app = this;
         $.getJSON("http://cas2016api.azurewebsites.net/speakers/",
             function (result) {
                 $.each(result,
@@ -47,7 +48,16 @@ var speakers = new Vue({
             });
         this.speakers = speakers;
     },
+    updated: function() {
+        this.scrollToHash(12);
+    },
     methods: {
-        
+        scrollToHash: function () {
+            var h = location.hash;
+            location.hash = "initial";
+            location.hash = h;
+        }
     }
 });
+
+speakers.scrollTo(12);
