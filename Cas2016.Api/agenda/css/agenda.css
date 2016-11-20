@@ -91,6 +91,10 @@
     vertical-align: baseline;
 }
 
+#session-speakers {
+    margin-top: 2em;
+}
+
 @media (min-width: 410px){
     .slot-container.grid-col-small .grid-item, .slot-container.grid-col .grid-item {
         width: calc(50% - 14px);
