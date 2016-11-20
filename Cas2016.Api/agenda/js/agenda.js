@@ -150,7 +150,8 @@ Vue.component('agenda-day', {
                         room: { id: rawSession.room.id, name: rawSession.room.name },
                         description: rawSession.description,
                         isPlenary: rawSession.isPlenary,
-                        language: rawSession.language
+                        language: rawSession.language,
+                        extraInfo: rawSession.extraInfo
                     };
 
                     apiSessions.push(session);

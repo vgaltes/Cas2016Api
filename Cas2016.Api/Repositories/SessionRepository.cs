@@ -101,8 +101,10 @@ namespace Cas2016.Api.Repositories
                 Tags = reader.IsDBNull(6) ? new List<TagModel>() : GetTagsFrom(reader.GetString(6)),
                 Room = _roomRepository.Get(reader.GetInt32(7)),
                 IsPlenary = reader.GetBoolean(8),
-                Language = reader.GetString(9)
+                Language = reader.GetString(9),
+                ExtraInfo = reader.GetString(10)
             };
+
             return session;
         }
 

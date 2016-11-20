@@ -14,7 +14,6 @@ namespace Cas2016.Api.Models
         public RoomModel Room { get; set; }
         public bool IsPlenary { get; set; }
         public string Language { get; set; }
+        public string ExtraInfo { get; set; }
     }
-
-    
 }
