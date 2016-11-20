@@ -236,7 +236,7 @@ var agenda = new Vue({
             });
         },
         getSpeakerLink: function(speakerId) {
-            return "./speakers.html#" + speakerId;
+            return "./speakers.html?id=" + speakerId;
         }
     },
     created: function () {

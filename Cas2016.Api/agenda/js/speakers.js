@@ -49,13 +49,20 @@ var speakers = new Vue({
         this.speakers = speakers;
     },
     updated: function() {
-        this.scrollToHash(12);
+        this.scrollToHash();
     },
     methods: {
         scrollToHash: function () {
-            var h = location.hash;
-            location.hash = "initial";
-            location.hash = h;
+            var ids = location.search.split("=");
+            if (ids.length > 1) {
+                var oPageInfo = {
+                    title: "speakers",
+                    url: location.href.split("?")[0]
+                };
+
+                history.replaceState(oPageInfo, oPageInfo.title, oPageInfo.url);
+                location.hash = "#" + ids[1];
+            }
         }
     }
 });
