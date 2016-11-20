@@ -91,7 +91,7 @@
     vertical-align: baseline;
 }
 
-#session-speakers {
+.with-margin-top {
     margin-top: 2em;
 }
 

@@ -26,10 +26,10 @@
                     <div id="session-description">
                         {{ sessionDetails.description }}
                     </div>
-                    <div v-if="sessionDetails.extraInfo" class="extra-info">
+                    <div v-if="sessionDetails.extraInfo" class="with-margin-top">
                         <p>({{sessionDetails.extraInfo}})</p>
                     </div>
-                    <div id="session-speakers">
+                    <div class="with-margin-top" id="session-speakers">
                         <div v-for="speaker in speakers">
                             <p><a :href=getSpeakerLink(speaker.id) target="_blank">{{ speaker.name }}</a></p>
                         </div>
