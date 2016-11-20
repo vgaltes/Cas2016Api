@@ -59,5 +59,3 @@ var speakers = new Vue({
         }
     }
 });
-
-speakers.scrollTo(12);
