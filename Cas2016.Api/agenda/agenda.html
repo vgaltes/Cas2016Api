@@ -26,6 +26,9 @@
                     <div id="session-description">
                         {{ sessionDetails.description }}
                     </div>
+                    <div v-if="sessionDetails.extraInfo" class="extra-info">
+                        <p>({{sessionDetails.extraInfo}})</p>
+                    </div>
                     <div id="session-speakers">
                         <div v-for="speaker in speakers">
                             <p><a :href=getSpeakerLink(speaker.id) target="_blank">{{ speaker.name }}</a></p>
