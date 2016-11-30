@@ -151,7 +151,8 @@ Vue.component('agenda-day', {
                         description: rawSession.description,
                         isPlenary: rawSession.isPlenary,
                         language: rawSession.language,
-                        extraInfo: rawSession.extraInfo
+                        extraInfo: rawSession.extraInfo,
+                        feedbackUrl: rawSession.feedbackUrl
                     };
 
                     apiSessions.push(session);

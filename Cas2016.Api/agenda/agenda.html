@@ -35,6 +35,9 @@
                             <p><a :href=getSpeakerLink(speaker.id) target="_blank">{{ speaker.name }}</a></p>
                         </div>
                     </div>
+                    <div v-if="sessionDetails.feedbackUrl" class="with-margin-top">
+                        <p>Has asistido a la charla? Por favor, dejanos tu <a :href={{sessionDetails.feedbackUrl}}>feedback</a> </p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

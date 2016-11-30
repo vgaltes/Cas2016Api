@@ -102,7 +102,8 @@ namespace Cas2016.Api.Repositories
                 Room = _roomRepository.Get(reader.GetInt32(7)),
                 IsPlenary = reader.GetBoolean(8),
                 Language = reader.GetString(9),
-                ExtraInfo = reader.IsDBNull(10) ? null : reader.GetString(10)
+                ExtraInfo = reader.IsDBNull(10) ? null : reader.GetString(10),
+                FeedbackUrl = reader.IsDBNull(11) ? null : reader.GetString(11),
             };
 
             return session;

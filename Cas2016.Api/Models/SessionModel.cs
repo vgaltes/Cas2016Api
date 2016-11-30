@@ -15,5 +15,6 @@ namespace Cas2016.Api.Models
         public bool IsPlenary { get; set; }
         public string Language { get; set; }
         public string ExtraInfo { get; set; }
+        public string FeedbackUrl { get; set; }
     }
 }
