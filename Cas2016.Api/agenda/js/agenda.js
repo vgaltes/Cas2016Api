@@ -211,6 +211,32 @@ var agenda = new Vue({
         sessionDetails: null,
         speakers:[]
     },
+    mounted: function () {
+        if (location.hash) {
+            var viewModel = this;
+            var sessionId = location.hash.substring(1);
+            var urlSession = "http://cas2016api.azurewebsites.net/sessions/" + sessionId;
+            $.getJSON(urlSession,
+                function (rawSession) {
+                    var session = {
+                        id: rawSession.id,
+                        title: rawSession.title,
+                        speakers: getSpeakers(rawSession.speakers),
+                        startTime: rawSession.startTime,
+                        endTime: rawSession.endTime,
+                        duration: rawSession.duration,
+                        room: { id: rawSession.room.id, name: rawSession.room.name },
+                        description: rawSession.description,
+                        isPlenary: rawSession.isPlenary,
+                        language: rawSession.language,
+                        extraInfo: rawSession.extraInfo,
+                        feedbackUrl: rawSession.feedbackUrl
+                    };
+
+                    viewModel.showSessionDetails(session);
+                });
+        }
+    },
     methods: {
         getSpeaker: function (speakerId) {
             var app = this;
@@ -244,7 +270,6 @@ var agenda = new Vue({
     created: function () {
         eventHub.$on('session-modal:open', this.showSessionDetails);
     },
-
     beforeDestroy: function () {
         eventHub.$off('session-modal:open', this.showSessionDetails);
     }
